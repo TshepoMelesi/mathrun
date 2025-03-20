@@ -13,6 +13,7 @@
         --secondary-300 : rgb(200, 200, 200);
 
         --header-height : 2em;
+        --button-height : 1em;
 }
 
 /* HEADER ============================================= */
@@ -68,7 +69,7 @@ main .board-container .board{
 
 main .board-container .button-container{
         position : absolute;
-        bottom : 0.2em;
+        bottom : 1em;
         left : 50%;
         transform : translate(-50%, 0);
 
@@ -82,12 +83,12 @@ main .board-container .button-container{
 }
 
 main .board-container .button-container button{
-        font-size : 1.2rem;
+        font-size : 1.6rem;
         padding: 0;
 
         border : 2px solid black;
 }
 
-/* main .board-container .button-container button:hover{
+main .board-container .button-container button:hover{
         background-color: var(--secondary-300);
-} */
+}
