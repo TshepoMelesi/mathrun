@@ -1,0 +1,373 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing : border-box;
+
+    font-size : 1em;
+    font-family: Arial;
+}
+
+h1{
+    font-size : 160%;
+}
+
+:root{
+    --header-height: 3em;
+    --white: #fff;
+    --black: #000;
+
+    --gray-50: #f9f9f9;
+    --gray-100: #ececec;
+    --gray-200: #e3e3e3;
+    --gray-300: #cdcdcd;
+    --gray-400: #b4b4b4;
+    --gray-500: #9b9b9b;
+    --gray-600: #676767;
+    --gray-700: #424242;
+    --gray-750: #2f2f2f;
+    --gray-800: #212121;
+    --gray-900: #171717;
+    --gray-950: #0d0d0d;
+
+    --humberger-line-height: 6px;
+
+    --max-width: 1000px;
+}
+
+body{
+    background-color: var(--gray-800);
+    height: 100dvh;
+    overflow-y: hidden;
+    display: grid;
+    grid-template-rows: var(--header-height) auto;
+}
+
+header{
+    height: var(--header-height);
+    position: relative;
+    background-color: var(--gray-900);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+header .container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5em 1em;
+}
+
+header nav{
+    display: flex;
+    gap: 1em;
+}
+
+header .container .logo{
+    color: var(--gray-200);
+}
+
+header .container .menu{
+    z-index: 100000;
+    display: none;
+    position: absolute;
+
+    top: 100%;
+    right: 0;
+    width: 50%;
+
+    background-color: var(--gray-200);
+    list-style: none;
+}
+
+header .container .menu .menu-item{
+    display: block;
+    padding: 0.6em;
+    text-decoration: none;
+    font-size: 120%;
+    color: black;
+    transition: display 150ms linear;
+}
+
+header .container .menu .menu-item:hover{
+    background-color: rgb(75, 75, 75);
+}
+
+main{
+    max-height: 100%;
+    position: relative;
+    overflow-y: hidden;
+    display: flex;
+    gap: 0.4em;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--gray-200);
+}
+
+main section{
+    width: min(100%, 1000px);
+    display: flex;
+    justify-content: center;
+}
+.controls-container{
+    display: grid;
+    grid-gap: 0.1em;
+    grid-template-columns: repeat(3, 1fr);
+}
+.options-container{
+    width: 100%;
+    display: grid;
+    grid-gap: 0.1em;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.options-container .option-btn{
+    padding: 0.4em;
+    background-color: var(--gray-200);
+    border: none;
+}
+
+.controls-container .control-btn{
+    width: 100%;
+    border: none;
+    background-color: var(--var(--gray-200));
+    padding: 0.2em;
+    color: var(--black);
+    font-size: 120%;
+}
+
+
+.card{
+    width: max(76%, 350px);
+    aspect-ratio: 16 / 9;
+    padding: 1em;
+
+    perspective: 1500px;
+}
+
+.card-inner{
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 650ms linear;
+    }
+
+.card-front, .card-back{
+    border-radius: 10px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    color: var(--gray-200);
+    background-color: black;
+    border: 2px solid var(--gray-100);
+}
+
+.card-front{
+    font-size: 3em;
+    background-color: var(--gray-800);
+}
+.card-back{
+    padding: 1em;
+    font-family: monospace;
+    flex-direction : column;
+    font-size: 1.2em;
+    overflow-y: hidden;
+    background-color: var(--gray-950);
+    transform: rotateY(180deg);
+}
+
+.card-back .added{
+    color: lime;
+}
+
+.card .card-question,
+.card .card-answer{
+    text-align: center;
+}
+
+.dashboard-btn{
+    color: var(--gray-200);
+    background-color: inherit;
+    height: 2em;
+    border: none;
+}
+.dashboard{
+    z-index: 1000;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow-y:hidden;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--gray-800);
+
+    padding: 0.4em 1em ;
+
+    transition: all 150ms linear;
+}
+
+.dashboard .quizz-form-container label{
+    margin-block: 0.3em;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    max-width: max(300px, 100%);
+}
+.quizz-library-container{
+    text-align : center;
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    height: 80dvh;
+}
+
+.dashboard .quizz-form-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    text-align: center;
+}
+.dashboard .quizz-form-container textarea{
+    width: 100%;
+}
+
+.quizz-list {
+    height: 100%;
+    padding: 0 0.4em;
+    overflow-y: auto;
+}
+
+.dashboard .quizz{
+    display: flex;
+    gap: 0.6em;
+    flex-direction: column;
+    background-color: black;
+    justify-content: space-between;
+    padding: 1em;
+    margin: 0.2em 0;
+    border-radius: 0.4em;
+}
+
+.quizz .question{
+    font-size: 1.2em;
+}
+.quizz .answer{
+    color: rgba(0, 255, 0, 0.871);
+}
+
+.dashboard-content{
+    display: flex;
+}
+
+.quizz-back, 
+.quizz-front{
+    resize: none;
+    padding: 0.4em 1em;
+    
+    border: 2px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 1.4em;
+    background-color: inherit;
+    text-align: center;
+    outline: none;
+}
+
+.quizz-front{
+    color: var(--gray-200);
+}
+
+.quizz-back{
+    border-color: lime;
+    color: lime;
+}
+
+.add-quizz{
+    width: 100%;
+    display: inline-block;
+    margin-top: 1em;
+}
+
+.quizz .card-actions{
+    width: 100%;
+    display: grid;
+    gap: 0.2em;
+    grid-template-columns: repeat(2, 1fr);
+
+}
+.quizz .card-actions button{
+    border : 2px solid var(--gray-200);
+    background-color: inherit;
+    color: var(--gray-200);
+}
+
+.quizz .card-actions button.delete{
+    border-color: red;
+    background-color: red;
+}
+
+.instruction{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--gray-200);
+    color: black;
+    padding: 0.3em;
+    text-align: center;
+}
+
+.instruction .dashboard-btn{
+    width: 50%;
+    background-color: black;
+    margin-top: 0.3em;
+    padding: 0.1em 1em;
+}
+
+
+.orientation{
+    text-align: center;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: 1000000;
+    position: absolute;
+    background-color: var(--gray-700);
+    padding: 1em;
+}
+
+.orientation h2 {
+    font-size: 2em;
+}
+
+.orientation p{
+    margin-top: 1em;
+    font-size: 1.4em;
+}
+
+p.warning{
+    background-color: var(--gray-200);
+
+    margin: 2em 0.4em;
+    padding: 0.6em;
+}
+
+@media (orientation : portrait){
+    .orientation{
+        display : block;
+    }
+}
+
+@media (orientation : landscape){
+    .orientation{
+        display : none;
+    }
+}

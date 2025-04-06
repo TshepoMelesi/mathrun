@@ -92,3 +92,24 @@ main .board-container .button-container button{
 main .board-container .button-container button:hover{
         background-color: var(--secondary-300);
 }
+
+
+/* ########################################################### */
+.promote{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1em;
+}
+
+.promote a{
+        text-decoration: none;
+        padding: 1em 3em;
+        font-size: 2em;
+        border-radius: 0.6em;
+        display: block;
+        background-color: black;
+        color: white;
+        width: 50%;
+}
