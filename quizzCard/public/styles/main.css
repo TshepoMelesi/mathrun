@@ -12,7 +12,7 @@ h1{
 }
 
 :root{
-    --header-height: 3em;
+    --header-height: 2em;
     --white: #fff;
     --black: #000;
 
@@ -28,8 +28,6 @@ h1{
     --gray-800: #212121;
     --gray-900: #171717;
     --gray-950: #0d0d0d;
-
-    --humberger-line-height: 6px;
 
     --max-width: 1000px;
 }
@@ -50,7 +48,6 @@ header{
     justify-content: space-between;
     align-items: center;
 }
-
 
 header .container{
     width: 100%;
@@ -141,7 +138,7 @@ main section{
 
 
 .card{
-    width: max(76%, 350px);
+    width: max(60%, 350px);
     aspect-ratio: 16 / 9;
     padding: 1em;
 
