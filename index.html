@@ -11,42 +11,102 @@
         </head>
 
         <body>
-                <header>
-                        <h1 class="logo">ASM</h1>
+                <header id="home">
+                        <div class="container">
+                                <h1 class="logo">ASM</h1>
 
+                                <nav class="menu">
+                                        <ul class="menu-items">
+                                                <li>
+                                                        <a href="./index.html">Home</a>
+                                                </li>
+                                                <li>
+                                                        <a href="#apps">Apps</a>
+                                                </li>
+                                        </ul>
+                                </nav>
+                        </div>
                 </header>
                 <main>
-                        <section class="promote">
-                                <h2>If you want to improve your memory</h2>
-                                <a href="./quizzCard/index.html">QuizzCard</a>
+                        <section class="container hero-section">
+                                <h2 class="pre-text">Let's work on your</h2>
+                                <h2 class="highlight">academics</h2>
                         </section>
 
-                        <section class="board-container">
-                                <canvas class="board"></canvas>
+                        <section class="container offer-section">
+                                <h2 class="section-title">What we offer</h2> 
                                 
-                                <section class="button-container">
-                                        <button class="prev-btn">PREV</button>
-                                        <button class="reveal-btn">REVEAL</button>
-                                        <button class="next-btn">NEXT</button>
-                                </section>
+                                <ul class="list-offers">
+                                        <li class="offer">
+                                                <h3 class="offer-title">Resources</h3>
+
+                                                <p class="offer-description">
+                                                        We have resources that you
+                                                        needs to boost your studies with. They
+                                                        cover both entertainment and learning
+                                                        aspects of your academic journey.
+                                                </p>
+                                        </li>
+                                        <li class="offer">
+                                                <h3 class="offer-title">Online Lessons</h3>
+
+                                                <p class="offer-description">
+                                                        We offer Whatsapp, Facebook, Zoom 
+                                                        and Telegram support for all our 
+                                                        learners. Our availability depends
+                                                        on your app of choice. 
+
+                                                </p>
+                                        </li>
+                                        <li class="offer">
+                                                <h3 class="offer-title">Apps & Games</h3>
+
+                                                <p class="offer-description">
+                                                        Our games are created to offer a 
+                                                        fun way of learning each of the
+                                                        subjects we offer services for.
+                                                </p>
+                                        </li>
+                                        <li class="offer">
+                                                <h3 class="offer-title">Sessions</h3>
+
+                                                <p class="offer-description">
+                                                        We have both group and one on 
+                                                        one sessions for our learners. To 
+                                                        provide value for money. 
+                                                </p>
+                                        </li>
+                                        <li class="offer">
+                                                <h3 class="offer-title">Free Education</h3>
+
+                                                <p class="offer-description">
+                                                        We have channels where we offer 
+                                                        eduaction for free, for those who 
+                                                        cannot afford to be part of our
+                                                        learning programs.
+                                                </p>
+                                        </li>
+                                </ul>
+                        </section>
+
+                        <section class="container apps-section">
+                                <h2 class="section-title">Apps and Games</h2>
+
+                                <ul class="list-apps">
+                                        <li class="app" id="apps">
+                                                <h2>QuickQuizz</h2>
+                                                <p>
+                                                        exercise your memory muscles with
+                                                        study flash cards
+                                                </p>
+                                                <a href="./quizzCard/index.html">Use App</a>
+                                        </li>
+                                </ul>
                         </section>
                 </main>
 
-                <script src="./js/graphics/Components.js"></script>
-                
-                <script src="./js/math/Vector.js"></script>
-                <script src="./js/math/lib.js"></script>
-                
-                <script src="./js/primitives/Point.js"></script>
-                <script src="./js/primitives/Line.js"></script>
-                <script src="./js/graphics/Display.js"></script>
-
-                <script src="./js/shapes/Text.js"></script>
-                
-                <script src="./js/assessments/Question.js"></script>
-
-                <script src="./js/Application.js"></script>
-                <script src="./js/controls/buttons.js"></script>
-                <script src="./js/main.js"></script>
+                <footer>
+                        <a href="#home">go up</a>
+                </footer>
         </body>
 </html>
