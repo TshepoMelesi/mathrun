@@ -45,7 +45,9 @@ const pages = {
 }
 const app = {
     name : "asm-app", 
-    quizzes : [], 
+    quizzes : [],
+    quizzMode : "LOOP_ALL",
+    isInitialized : true
 }
 
 const sanitizeHTML = (input) => {
@@ -59,9 +61,9 @@ const sanitizeText = (input) => {
 const generateId = (max = 10000000, min = 0) => {
     return Math.round(Math.random() * (max - min) + min)
 }
-const addQuizz = (question, answer, subject, type) => {
+const addQuizz = (question, answer, subject, type, level="all", curriculum="all") => {
     const id = generateId()
-    const quizz = {question, answer, id, subject, type}
+    const quizz = {question, answer, id, subject, type, level, curriculum}
 
     saveQuizz(quizz)
 }
@@ -160,14 +162,12 @@ const setMode = (mode) => {
 const getMode = () => {
     return pages.mode
 }
-
 const setCurrPage = (page) => {
     return pages.currentPage = page.element
 }
 const getCurrPage = () => {
     return pages.currentPage
 }
-
 const clearInputs = () => {
     quizzFront.value = ""
     quizzBack.value = ""
@@ -236,7 +236,6 @@ const handleHome = () => {
         dashboard.style.display = "none"
         dashboard.style.zIndex = -1000000
 }
-
 const routeTo = (mode) => {
     setMode(mode)
 
@@ -253,25 +252,35 @@ const renderMain = () => {
     footerActionBtns[1].innerText = pages.pageList[getMode()].rightAction.name
     appTitle.innerText = pages.pageList[getMode()].title
 }
-
 const handleLeftAction = () => {
     pages.pageList[getMode()].leftAction.func()
 }
-
 const handleRightAction = () => {
     pages.pageList[getMode()].rightAction.func()
 }
-
+const initialize = () => {
+    data.terms.forEach((term) => {
+        addQuizz(term.front, term.back, term.subject, term.type, term.level, term.curriculum)
+    })
+}
+if(!app.isInitialized){
+    initialize()
+    app.isInitialized = true
+}
 let timer = null
 const stopwatch = () => {
     clearInterval(timer)
     let counter = 3
+    track.style.width = counter + "%"
     timer = setInterval(() => {
-        if(counter >=98){
+        if(counter >=90){
+            handleNext()
             counter = 3
-            clearInterval(timer)
+            if(app.quizzMode !== "LOOP_ALL"){
+                clearInterval(timer)
+            }
         }
-        counter += 1
+        counter += 10
         track.style.width = counter + "%"
     }, 1000 * 1.5)
 }
