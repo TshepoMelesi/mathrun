@@ -6,7 +6,6 @@ const cardQuestion = document.querySelector(".card-question")
 const cardAnswer = document.querySelector(".card-answer")
 const dashboard = document.querySelector(".dashboard")
 const quizzList = document.querySelector(".card-list")
-const dashboardContent = document.querySelector(".dashboard-content")
 const quizzFront = document.querySelector(".front-content")
 const quizzBack = document.querySelector(".back-content")
 const main = document.querySelector(".app-main")
@@ -16,7 +15,8 @@ const playCardPage = document.querySelector(".app-play-cards")
 const footerActionBtns= document.querySelectorAll(".footer-action")
 const track = document.querySelector(".track")
 const appTitle = document.querySelector(".app-title")
-const menuBtns = document.querySelector(".menu-btns")
+const subjectEl = document.querySelector(".subject")
+const typeEl = document.querySelector(".quizz-type")
 
 const modes = ["ADD_CARD", "CARD_LIST", "PLAY_CARDS", "HOME"]
 const pages = {
@@ -46,7 +46,6 @@ const pages = {
 const app = {
     name : "asm-app", 
     quizzes : [], 
-    
 }
 
 const sanitizeHTML = (input) => {
@@ -60,9 +59,9 @@ const sanitizeText = (input) => {
 const generateId = (max = 10000000, min = 0) => {
     return Math.round(Math.random() * (max - min) + min)
 }
-const addQuizz = (question, answer) => {
+const addQuizz = (question, answer, subject, type) => {
     const id = generateId()
-    const quizz = {question, answer, id}
+    const quizz = {question, answer, id, subject, type}
 
     saveQuizz(quizz)
 }
@@ -72,12 +71,11 @@ const createDb = (name = null) => {
     localStorage.setItem(app.name, JSON.stringify(app))
 }
 const saveQuizz = (quizz) => {
-    let appDb = JSON.parse(localStorage.getItem(app.name))
-
-    if(!appDb) {
+    if(!getDb()) {
         createDb(app.name)
-        // let appDb = JSON.parse(localStorage.getItem(app.name))
     }
+
+    let appDb = JSON.parse(localStorage.getItem(app.name))
 
     if(appDb?.quizzes.find(q => 
         q.question == quizz.question && 
@@ -179,13 +177,14 @@ const populateInputs = (quizz) => {
     quizzBack.value = quizz.answer
 }
 const handleAddQuizz = () => {
+    const subject = sanitizeText(sanitizeHTML(subjectEl.options[subjectEl.selectedIndex].text))
+    const type = sanitizeText(sanitizeHTML(typeEl.options[typeEl.selectedIndex].text))
     const front = sanitizeText(sanitizeHTML(quizzFront.value))
     const back = sanitizeText(sanitizeHTML(quizzBack.value))
     
     if(!front || !back) return
-    console.log(front, back)
 
-    addQuizz(front, back)
+    addQuizz(front, back, subject, type)
     db = getDb()
     refreshList()
     clearInputs()
@@ -198,11 +197,9 @@ const handleEdit = (id) => {
     removeQuizz(id)
 }
 const handleDelete = (id) => {
-    console.log("delete is triggered")
     const delQuizz = removeQuizz(id)
 }
 const createItem = (data) => {
-    console.log(data)
     return `<li class="card-list-item" data-id="${data.id}">
                 <div class="card-content-front">
                     <p class="content-front">${data.question}</p>
@@ -229,8 +226,6 @@ const handleClearAll = () => {
 
     localStorage.setItem(app.name, JSON.stringify(app))
     refreshList()
-
-    return console.log("cleared your card list")
 }
 const handleDashboard = () => {
     routeTo("CARD_LIST")
@@ -241,23 +236,11 @@ const handleHome = () => {
         dashboard.style.display = "none"
         dashboard.style.zIndex = -1000000
 }
-if(width > height){
-    // 16/9
-    dashboardContent.style.flexDirection = "row"
-} else{
-    // 9/16
-    dashboardContent.style = `
-    flex-direction : column;
-    gap: 2em;
-    align-items : center;
-    justify-content: start;
-    `
-}
+
 const routeTo = (mode) => {
     setMode(mode)
 
     renderMain()
-    console.log(pages.mode)
 }
 const renderMain = () => {
     getCurrPage().style.zIndex = "0"

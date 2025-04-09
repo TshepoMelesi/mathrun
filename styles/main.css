@@ -248,7 +248,11 @@ footer a{
 
 /* TABLET VERSION =============================================================================== */
 @media (min-width : 767px){
-                
+        .menu-btns{
+                position: absolute;
+
+                top: 100%;
+        }
         .menu .menu-items{
                 position: relative;
                 
