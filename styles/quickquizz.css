@@ -96,12 +96,12 @@ main .app-main .app-add-card textarea{
     background-color: inherit;
     outline: none;
     border-radius: 0.5em;
-    color: white;
+    color: var(--primary-100);
     display: block;
 }
 
 main .app-main .app-add-card select option{
-    color: black;
+    color: var(--secondary-100);
 }
 
 main .app-main .app-add-card textarea::placeholder{
@@ -127,13 +127,13 @@ main .app-main .app-info{
 
 main .app-main .app-info select{
     background-color: inherit;
-    color: white;
+    color: var(--primary-100);
     outline: none;
     border: none;
 }
 
 main .app-main .app-info select option{
-    color: black;
+    color: var(--secondary-100);
 }
 
 main .app-main .app-card-list{
@@ -147,7 +147,7 @@ main .app-main .card-list{
 }
 
 .card-list .card-list-item{
-    border: 2px solid white;
+    border: 2px solid var(--primary-100);
     margin-bottom: 0.6em;
     margin-inline: 0.6em;
     text-align: center;
@@ -172,13 +172,14 @@ main .app-main .card-list{
     background-color: inherit;
     border: none;
     outline: none;
-    color: white;
+    color: var(--primary-100);
 }
 
 .card-list .card-list-item .edit,
 .card-list .card-list-item .delete{
     padding: 0.2em 0.6em;
 }
+
 
 main .app-main .app-play-cards{
     display: flex;
@@ -191,7 +192,7 @@ main .app-main .timer{
     position : relative;
     width: 100%;
     height: 1.2em;
-    background-color: white;
+    background-color: var(--primary-100);
     border-radius: 1em;
     margin-bottom: 0.6em;
 }
@@ -203,7 +204,7 @@ main .app-main .timer .track{
     width: 90%;
     height: 0.8em;
     border-radius: 1em;
-    background-color: black;
+    background-color: var(--secondary-100);
 }
 
 main .app-footer{
@@ -221,7 +222,7 @@ main .app-footer button{
 
 main .app-footer .left{
     background-color: inherit;
-    color: white;
+    color: var(--primary-100);
 }
 /* ============================================== */
 
@@ -254,8 +255,8 @@ main .app-footer .left{
     display: flex;
     justify-content: center;
     align-items:center;
-    color: var(--gray-800);
-    background-color: black;
+    color: black;
+    background-color: white;
     border: 2px solid var(--gray-100);
 }
 
@@ -271,7 +272,7 @@ main .app-footer .left{
     background-color: inherit;
     border : none;
     outline: none;
-    font-size: 0.6em;
+    font-size: 0.8em;
 }
 .card-back{
     padding: 1em;
@@ -351,7 +352,7 @@ main .app-footer .left{
     display: flex;
     gap: 0.6em;
     flex-direction: column;
-    background-color: black;
+    background-color: var(--secondary-100);
     justify-content: space-between;
     padding: 1em;
     margin: 0.2em 0;
@@ -420,7 +421,7 @@ main .app-footer .left{
     flex-direction: column;
     align-items: center;
     background-color: var(--gray-800);
-    color: white;
+    color: var(--primary-100);
     border-radius: 0.6em;
     padding: 0.3em;
     text-align: center;
@@ -428,8 +429,8 @@ main .app-footer .left{
 
 .instruction .dashboard-btn{
     width: 50%;
-    background-color: white;
-    color: black;
+    background-color: var(--primary-100);
+    color: var(--secondary-100);
     margin-top: 0.3em;
     padding: 0.1em 1em;
 }

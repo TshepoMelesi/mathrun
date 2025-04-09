@@ -8,6 +8,7 @@
 
 html{
         scroll-behavior : smooth;
+        overflow-x: hidden;
 }
 
 :root{
@@ -194,6 +195,18 @@ main{
         display: block;
         margin : 1em auto 0 auto;
         width: 80%;
+}
+
+.menu-btns{
+        display: flex;
+        flex-direction: column;
+}
+
+.menu-btns button{
+        padding: 0.3em;
+        margin: 0.2em 0;
+        border: none;
+        outline: none;
 }
 
 /* FOOTER =============================================================================== */

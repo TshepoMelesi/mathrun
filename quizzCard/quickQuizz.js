@@ -5,7 +5,7 @@ const cardInner = document.querySelector(".card-inner")
 const cardQuestion = document.querySelector(".card-question")
 const cardAnswer = document.querySelector(".card-answer")
 const dashboard = document.querySelector(".dashboard")
-const quizzList = document.querySelector(".quizz-list")
+const quizzList = document.querySelector(".card-list")
 const dashboardContent = document.querySelector(".dashboard-content")
 const quizzFront = document.querySelector(".front-content")
 const quizzBack = document.querySelector(".back-content")
@@ -15,7 +15,8 @@ const cardListPage = document.querySelector(".app-card-list")
 const playCardPage = document.querySelector(".app-play-cards")
 const footerActionBtns= document.querySelectorAll(".footer-action")
 const track = document.querySelector(".track")
-
+const appTitle = document.querySelector(".app-title")
+const menuBtns = document.querySelector(".menu-btns")
 
 const modes = ["ADD_CARD", "CARD_LIST", "PLAY_CARDS", "HOME"]
 const pages = {
@@ -23,16 +24,19 @@ const pages = {
     mode : "CARD",
     pageList : {
         "ADD_CARD": {
+            title : "add new card",
             element : addCardPage,
             "leftAction" : {func : () => handleDashboard(), name : "view cards"},
             "rightAction" : {func : () => handleAddQuizz(), name : "save card"},
         },
         "CARD_LIST": {
+            title : "deck of cards",
             element : cardListPage,
             "leftAction" : {func : () => handleClearAll(), name : "clear all"},
             "rightAction" : {func : () => routeTo("ADD_CARD"), name : "add card"},
         },
         "PLAY_CARDS": {
+            title : "build good memory",
             element : playCardPage,
             "leftAction" : {func : () => handlePrev(), name : "previous"},
             "rightAction" : {func : () => handleNext(), name : "next card"},
@@ -187,6 +191,7 @@ const handleAddQuizz = () => {
     clearInputs()
 }
 const handleEdit = (id) => {
+    routeTo("ADD_CARD")
     const quizz = db.quizzes[getQuizzIndex(id)]
 
     populateInputs(quizz)
@@ -197,12 +202,17 @@ const handleDelete = (id) => {
     const delQuizz = removeQuizz(id)
 }
 const createItem = (data) => {
-    return`<li class="quizz" data-id="${data.id}">
-                <p class="question"><strong>${data.question}</strong></p>
-                <p class="answer">${data.answer}</p>
-                <div class="card-actions">
-                    <button class="edit" onclick="handleEdit(${data.id})">edit</button>
-                    <button class="delete" onclick="handleDelete(${data.id})">delete</button>
+    console.log(data)
+    return `<li class="card-list-item" data-id="${data.id}">
+                <div class="card-content-front">
+                    <p class="content-front">${data.question}</p>
+                </div>
+                <div class="card-content-back">
+                    <p class="content-back">${data.answer}</p>
+                </div>
+                <div class="card-action">
+                    <button class="control-btn delete" onclick="handleDelete(${data.id})">delete</button>
+                    <button class="control-btn edit"  onclick="handleEdit(${data.id})">edit card</button>
                 </div>
             </li>`
 }
@@ -253,11 +263,12 @@ const renderMain = () => {
     getCurrPage().style.zIndex = "0"
     getCurrPage().style.display = "none"
     pages.pageList[getMode()].element.style.zIndex = "10"
-    pages.pageList[getMode()].element.style.display= "flex"
+    pages.pageList[getMode()].element.style.display = getMode() == "PLAY_CARDS" ? "flex" : getMode() == "ADD_CARD" ? "grid" : "block"
     setCurrPage(pages.pageList[getMode()])
 
     footerActionBtns[0].innerText = pages.pageList[getMode()].leftAction.name
     footerActionBtns[1].innerText = pages.pageList[getMode()].rightAction.name
+    appTitle.innerText = pages.pageList[getMode()].title
 }
 
 const handleLeftAction = () => {
