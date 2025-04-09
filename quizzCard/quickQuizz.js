@@ -47,7 +47,7 @@ const app = {
     name : "asm-app", 
     quizzes : [],
     quizzMode : "LOOP_ALL",
-    isInitialized : true
+    isInitialized : false
 }
 
 const sanitizeHTML = (input) => {
