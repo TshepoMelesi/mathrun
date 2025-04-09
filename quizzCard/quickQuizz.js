@@ -47,7 +47,6 @@ const app = {
     name : "asm-app", 
     quizzes : [],
     quizzMode : "LOOP_ALL",
-    isInitialized : false
 }
 
 const sanitizeHTML = (input) => {
@@ -61,33 +60,80 @@ const sanitizeText = (input) => {
 const generateId = (max = 10000000, min = 0) => {
     return Math.round(Math.random() * (max - min) + min)
 }
-const addQuizz = (question, answer, subject, type, level="all", curriculum="all") => {
+const addQuizz = (compQuizz) => {
     const id = generateId()
-    const quizz = {question, answer, id, subject, type, level, curriculum}
+    // const quizz = {question, answer, id, subject, type, level, curriculum}
 
-    saveQuizz(quizz)
+    saveQuizz(
+        {
+            id,
+            s : compQuizz.s,
+            f : compQuizz.f,
+            l : compQuizz.l,
+            c : compQuizz.c,
+            b : compQuizz.b,
+            t : compQuizz.t
+        }
+    )
 }
+
+const metadata = {
+    "card" : {"s" : "subject","c" : "curriculum", "l" : "level", 
+        "f" : "front", "b" : "back", "t" : "type" },
+    "content" : {
+      "d" : "definition",
+      "f" : "formula",
+      "l" : "law",
+      "n" : "explain",
+      "x" : "solve for x",
+      "xy" : "simultaneous equation",
+      "wp" : "word problem",
+      "fx" : "functions",
+      "sf" : "subject of the formula",
+      "s" : "simplify",
+      "e" : "exponents",
+      "G10" : "Grade 10",
+      "G11" : "Grade 11",
+      "G12" : "Grade 12",
+      "P" : "Physics",
+      "C" : "Chemistry",
+      "M" : "Mathematics"
+    }
+  }
+
+const decompress = (data, metadata) => {
+    const entry = {}
+    Object.entries(data).forEach(d => {
+        entry[metadata.card[d[0]]] = metadata.content[d[1]] || d[1]
+    })
+    return entry
+}
+
+const temp = []
 const createDb = (name = null) => {
     if(!name) return console.log("Db name needed!")
     console.log("create db => ", name)
     localStorage.setItem(app.name, JSON.stringify(app))
+
+    data.terms.forEach(d => addQuizz(d))
 }
 const saveQuizz = (quizz) => {
     if(!getDb()) {
         createDb(app.name)
     }
-
+    
     let appDb = JSON.parse(localStorage.getItem(app.name))
-
+    
     if(appDb?.quizzes.find(q => 
-        q.question == quizz.question && 
-        q.answer == quizz.answer)
+        q.f == quizz.f && 
+        q.b == quizz.b)
     ){
         return
     }
-
+    
     appDb.quizzes.push(quizz)
-
+    console.log(appDb.quizzes)
+    
     localStorage.setItem(app.name, JSON.stringify(appDb))
 }
 const getQuizzIndex = (id) =>{
@@ -120,8 +166,8 @@ const generateQuizz = () => {
     return quizz
 }
 const display = (quizz) => {
-    cardQuestion.innerText = quizz.question
-    cardAnswer.innerText = quizz.answer
+    cardQuestion.innerText = quizz.f
+    cardAnswer.innerText = quizz.b
 }
 const handlePrev = () => {
 
@@ -173,18 +219,19 @@ const clearInputs = () => {
     quizzBack.value = ""
 }
 const populateInputs = (quizz) => {
+    console.log(quizz)
     quizzFront.value = quizz.question
     quizzBack.value = quizz.answer
 }
 const handleAddQuizz = () => {
-    const subject = sanitizeText(sanitizeHTML(subjectEl.options[subjectEl.selectedIndex].text))
-    const type = sanitizeText(sanitizeHTML(typeEl.options[typeEl.selectedIndex].text))
-    const front = sanitizeText(sanitizeHTML(quizzFront.value))
-    const back = sanitizeText(sanitizeHTML(quizzBack.value))
+    const s = sanitizeText(sanitizeHTML(subjectEl.options[subjectEl.selectedIndex].text))
+    const t = sanitizeText(sanitizeHTML(typeEl.options[typeEl.selectedIndex].text))
+    const f = sanitizeText(sanitizeHTML(quizzFront.value))
+    const b = sanitizeText(sanitizeHTML(quizzBack.value))
     
-    if(!front || !back) return
+    if(!f || !b) return
 
-    addQuizz(front, back, subject, type)
+    addQuizz({f, b, s, t, c : "all", l : "all"})
     db = getDb()
     refreshList()
     clearInputs()
@@ -202,10 +249,10 @@ const handleDelete = (id) => {
 const createItem = (data) => {
     return `<li class="card-list-item" data-id="${data.id}">
                 <div class="card-content-front">
-                    <p class="content-front">${data.question}</p>
+                    <p class="content-front">${data.f}</p>
                 </div>
                 <div class="card-content-back">
-                    <p class="content-back">${data.answer}</p>
+                    <p class="content-back">${data.b}</p>
                 </div>
                 <div class="card-action">
                     <button class="control-btn delete" onclick="handleDelete(${data.id})">delete</button>
@@ -213,14 +260,23 @@ const createItem = (data) => {
                 </div>
             </li>`
 }
+
+// TODO : add pagination
+const loadQuizzes = () => {
+    for(let i = 0; i < 50; i++){
+        quizzes.push(db.quizzes[i])
+    }
+}
 const refreshList = () =>{
     const db = getDb()
 
     quizzList.innerHTML = ""
-    db.quizzes.forEach(q => {
-        quizzList.innerHTML += createItem(q)
-    })
+    loadQuizzes()
+    for(let i = 0; i < 50; i++){
+        quizzList.innerHTML += createItem(quizzes[i])
+    }
 }
+
 const handleClearAll = () => {
     app.quizzes = []
 
@@ -260,12 +316,12 @@ const handleRightAction = () => {
 }
 const initialize = () => {
     data.terms.forEach((term) => {
-        addQuizz(term.front, term.back, term.subject, term.type, term.level, term.curriculum)
+        addQuizz(term)
     })
 }
-if(!app.isInitialized){
+if(getDb().quizzes.length < 100){
+    console.log("initializing")
     initialize()
-    app.isInitialized = true
 }
 let timer = null
 const stopwatch = () => {
