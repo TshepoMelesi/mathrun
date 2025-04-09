@@ -11,18 +11,26 @@ html{
 }
 
 :root{
-        --primary-100   : black;
-        --secondary-100 : rgb(240, 240, 240);
+        --primary-100   : rgb(255, 255, 255);
+        --secondary-100 : rgb(23, 23, 23);
         --secondary-200 : rgb(220, 220, 220);
         --secondary-300 : rgb(200, 200, 200);
 
-        --header-height : 2em;
+        --header-height : 3em;
         --button-height : 1em;
+        
+        --burger-width: 2em;
+        --burger-height : 1.6em;
+        --burgerline-height: 0.4em;
+
+        --footer-height: 3em;
 }
 
 /* HEADER ============================================= */
 
 body{
+        position: relative;
+        overflow-x: hidden;
         height: 100dvh;
         background-color : var(--secondary-100);
 
@@ -44,6 +52,8 @@ header{
         display : flex;
         justify-content : center;
         align-items : center;
+
+        position : relative;
 }
 
 header .container{
@@ -52,6 +62,10 @@ header .container{
         display : flex;
         justify-content : space-between;
         align-items : center;
+}
+
+header nav {
+        display: flex;
 }
 
 header nav ul{
@@ -67,12 +81,57 @@ a{
 }
 
 header nav ul a{
-        color: black;
+        color: var(--primary-100);
 }
 
 .logo{
         color: var(--primary-100);
         font-size : 1.6em;
+}
+
+
+.burger{
+        background-color: inherit;
+        border: none;
+        outline: none;
+        position: relative;
+        width: var(--burger-width);
+        height: var(--burger-height);
+}
+
+.burgerline,
+.burgerline:before,
+.burgerline:after
+{
+        content: " ";
+        height: var(--burgerline-height);
+        width: 100%;
+        border-radius: var(--burgerline-height);
+        background-color: var(--primary-100);
+        right: 0;
+}
+
+.burgerline:before{
+        position: absolute;
+        width: 60%;
+        top: 0;
+        transition: width 150ms linear;
+}
+.burgerline:after{
+        position: absolute;
+        width: 70%;
+        bottom: 0;
+        transition: width 150ms linear;
+}
+
+.menu:has(.burger:focus) .burgerline:after,
+.menu:has(.burger:focus) .burgerline:before
+{
+        width: 100%;
+}
+
+.menu:has(.burger:focus) .menu-items{
+        left: calc(30% - 1em);
 }
 /* MAIN ============================================= */
 main{
@@ -84,16 +143,15 @@ main{
 }
 
 .section-title{
+        color: var(--primary-100);
         margin-block : 2em 1em;
 }
 .hero-section{
-        background-color : black;
-        color: white;
+        background-color : var(--primary-100);
+        color: var(--secondary-100);
         border-radius: 0.6em;
 
         padding: 1em;
-        /* margin: 1em 3em; */
-        /* min-height: 50%; */
 }
 
 .hero-section .pre-text{
@@ -102,7 +160,6 @@ main{
 .hero-section .highlight{
         font-size: 3em;
 }
-
 
 .offer-section .list-offers,
 .apps-section .list-apps{
@@ -116,11 +173,11 @@ main{
 .offer-section .list-offers .offer,
 .apps-section .list-apps .app{
         text-align: center;
-        width: min(300px, 70%);
+        width: min(320px, 90%);
         min-width: 200px;
 
-        background-color: black;
-        color: white;
+        background-color: var(--primary-100);
+        color: var(--secondary-100);
 
         padding: 1em;
         border-radius: 0.6em;
@@ -128,32 +185,50 @@ main{
 
 .offer-section .list-offers .offer .offer-title{
         margin-bottom: 1em;
-
 }
 
 .list-apps .app a{
-        background-color: white;
-        color: black;
+        background-color: var(--secondary-100);
+        color: var(--primary-100);
         
         display: block;
         margin : 1em auto 0 auto;
         width: 80%;
 }
 
-
 /* FOOTER =============================================================================== */
 footer{
         text-align: center;
-        background-color: black;
+        background-color: var(--primary-100);
         padding: 1em;
+        height: var(--footer-height);
 }
 
 footer a{
-        color: white;
+        color: var(--secondary-100);
 }
 /* ====================================================================================== */
 /* MOBILE VERSION =============================================================================== */
-@media (min-width : 100px){
+@media (max-width : 760px){
+        
+        .menu .menu-items{
+                position: absolute;
+                z-index: 100;
+                background-color: black;
+                border-radius: 0.6em 0 0 0.6em;
+                padding: 1em;
+                left: 100%;
+                top: calc(100% + 1em);
+                width: 70%;
+                display: flex;
+                flex-direction: column;
+
+                transition: left 150ms linear;
+        }
+
+        .menu .menu-items a{
+                font-size: 1.4em;
+        }
 
 }
 /* ####################################################################################### */
@@ -161,6 +236,16 @@ footer a{
 /* TABLET VERSION =============================================================================== */
 @media (min-width : 767px){
                 
+        .menu .menu-items{
+                position: relative;
+                
+                display: flex;
+        }
+
+        .burger{
+                display: none;
+        }
+
         .hero-section .pre-text{
                 font-size: 200%;
         }
