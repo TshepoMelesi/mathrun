@@ -132,20 +132,19 @@ const saveQuizz = (quizz) => {
     }
     
     appDb.quizzes.push(quizz)
-    console.log(appDb.quizzes)
     
     localStorage.setItem(app.name, JSON.stringify(appDb))
 }
 const getQuizzIndex = (id) =>{
-    const db = getDb()
-    return db.quizzes.findIndex(q => q.id === id)
+    return quizzes.findIndex(q => q.id === id)
 }
 const removeQuizz = (id) => {
     const quizzIdx = getQuizzIndex(id)
-    const delQuizz = db.quizzes.splice(quizzIdx, 1)
-    app.quizzes = db.quizzes
-    localStorage.setItem(app.name, JSON.stringify(app))
+    const delQuizz = quizzes.splice(quizzIdx, 1)
+    app.quizzes = quizzes
+    // localStorage.setItem(app.name, JSON.stringify(app))
     refreshList()
+    console.log(app.quizzes)
 
     return delQuizz
 }
@@ -158,8 +157,9 @@ const getDb = () => {
     }
     return JSON.parse(db)
 }
-let db = getDb()    
+let db = getDb()
 const generateQuizz = () => {
+    const db = getDb()
     const quizz = db.quizzes[Math.floor(Math.random() * db.quizzes.length)]
 
     quizzes.push(quizz)
@@ -219,9 +219,8 @@ const clearInputs = () => {
     quizzBack.value = ""
 }
 const populateInputs = (quizz) => {
-    console.log(quizz)
-    quizzFront.value = quizz.question
-    quizzBack.value = quizz.answer
+    quizzFront.value = quizz.f
+    quizzBack.value = quizz.b
 }
 const handleAddQuizz = () => {
     const s = sanitizeText(sanitizeHTML(subjectEl.options[subjectEl.selectedIndex].text))
@@ -237,6 +236,7 @@ const handleAddQuizz = () => {
     clearInputs()
 }
 const handleEdit = (id) => {
+    const db = getDb()
     routeTo("ADD_CARD")
     const quizz = db.quizzes[getQuizzIndex(id)]
 
@@ -262,7 +262,7 @@ const createItem = (data) => {
 }
 
 // TODO : add pagination
-const loadQuizzes = () => {
+const loadQuizzes = (db) => {
     for(let i = 0; i < 50; i++){
         quizzes.push(db.quizzes[i])
     }
@@ -271,7 +271,7 @@ const refreshList = () =>{
     const db = getDb()
 
     quizzList.innerHTML = ""
-    loadQuizzes()
+    loadQuizzes(db)
     for(let i = 0; i < 50; i++){
         quizzList.innerHTML += createItem(quizzes[i])
     }

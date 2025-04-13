@@ -244,6 +244,77 @@ footer a{
         }
 
 }
+/* SIGNIN ##################################################################### */
+main .signin-header{
+        margin: 0.2em;
+        color: white;
+}
+.form-container{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+}
+
+.form-container .alert-box{
+        border: 2px solid red;
+        background-color: rgba(255, 0, 0, 0.405);
+        padding: 0.4em;
+        color: white;
+}
+
+.form-container .signin-form{
+        width: min(400px, 100%);
+        border: 2px solid white;
+        padding: 1em;
+        border-radius: 0.6em;
+}
+
+.form-container .signin-form .form-input.signup-hide{
+        display: none;
+}
+.form-container .signin-form .form-input{
+        display: flex;
+        gap: 0.4em;
+        flex-direction: column;
+        width: 100%;
+
+        padding:0.5em 0;
+}
+
+.form-container .signin-form .form-input label{
+        color: white;
+}
+
+.form-container .signin-form .form-input input{
+        padding: 0.4em;
+        background-color: inherit;
+        color: white;
+        border: 2px solid white;
+        outline: none;
+        transition: border-color 150ms ease-in;
+}
+
+.form-container .signin-form .form-input input:focus{
+        border-color: lime;
+}
+
+.form-container .signin-form .actions{
+        text-align: right;
+}
+.form-container .signin-form .actions button{
+        padding: 0.2em 1em;
+        background-color: white;
+        border: 2px solid white;
+        font-weight: bold;
+}
+
+.form-container .signin-form .actions button.action-signin{
+        background-color: inherit;
+        color: white;
+}
+
+
+
 /* ####################################################################################### */
 
 /* TABLET VERSION =============================================================================== */
