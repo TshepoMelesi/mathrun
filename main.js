@@ -42,6 +42,26 @@ if("serviceWorker" in navigator)
                         .catch((error) => {
                                 conole.log("Service Worker reg failed: " + error)
                         })
+                
+                let deferredPrompt
+                window.addEventListener("beforeinstallpromt", (event) => {
+                        event.preventDefault()
+                        deferredPrompt = event
+
+                        const installBtn = document.createElement("button")
+                        installBtn.innerText = "Install App"
+
+                        document.body.appendChild(installBtn)
+
+                        installBtn.addEventListener("click", event => {
+                                if(choiceResult.outcome === "accepted"){
+                                        console.log("App installed")
+                                }
+                                deferredPrompt = null
+                        })
+                })
+
+
 
                 const myApp = new Application(
                         board, 
