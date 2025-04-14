@@ -1,95 +1,50 @@
-const buttonContainer = document.querySelector(".button-container")
-const board = document.querySelector(".board")
-const context = board.getContext("2d")
-
-class Card extends Vector{
-        constructor({x, y, width, height, round}){
-                super(x, y)
-                this.width = width ? width : 100
-                this.height = height ? height : 100
-                this.round = [round, round, round, round]
-                this.fillColor = "black"
-        }
-
-        draw(context){
-                context.beginPath()
-                context.fillStyle = this.fillColor
-                context.roundRect(
-                        this.x,
-                        this.y,
-                        this.width,
-                        this.height,
-                        this.round
-                )
-                context.fill()
-                context.closePath()
-        }
-}
-
-if("serviceWorker" in navigator)
-        {
-        window.addEventListener("load", () => {
-                const WIDTH = window.innerWidth
-                const HEIGHT = window.innerHeight
-
-                board.width = WIDTH
-                board.height = HEIGHT
-
-                navigator.serviceWorker.register("/service-worker.js")
-                        .then((registration) => {
-                                console.log("service worker registered: ", registration)
-                        })
-                        .catch((error) => {
-                                conole.log("Service Worker reg failed: " + error)
-                        })
-                
-                let deferredPrompt
-                window.addEventListener("beforeinstallpromt", (event) => {
-                        event.preventDefault()
-                        deferredPrompt = event
-
-                        const installBtn = document.createElement("button")
-                        installBtn.innerText = "Install App"
-
-                        document.body.appendChild(installBtn)
-
-                        installBtn.addEventListener("click", event => {
-                                if(choiceResult.outcome === "accepted"){
-                                        console.log("App installed")
-                                }
-                                deferredPrompt = null
-                        })
+if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            // Register service worker
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('✅ Service Worker registered:', registration);
                 })
-
-
-
-                const myApp = new Application(
-                        board, 
-                        {
-                                width : WIDTH, 
-                                height : HEIGHT,
-                                level : 3
+                .catch((error) => {
+                    console.error('❌ Service Worker registration failed:', error);
+                });
+    
+            let deferredPrompt = null;
+    
+            // Listen for the beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (event) => {
+                console.log('ℹ️ beforeinstallprompt event fired');
+    
+                // Prevent default mini-infobar from appearing on mobile
+                event.preventDefault();
+    
+                // Save the event for triggering later
+                deferredPrompt = event;
+    
+                const installBtn = document.getElementById('install-btn');
+                installBtn.style.display = 'block';
+                installBtn.innerText = 'Install App';
+    
+                installBtn.addEventListener('click', () => {
+                    if (!deferredPrompt) return;
+    
+                    // Show the install prompt
+                    deferredPrompt.prompt();
+    
+                    // Wait for user's response
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('✅ User accepted the install prompt');
+                        } else {
+                            console.log('❌ User dismissed the install prompt');
                         }
-                )
-                
-                const handleNext = () => {
-                        myApp.setChallenge()
-                }
-                nextBtn.ontouchstart = () => handleNext()
-                nextBtn.onmousedown = () => handleNext()
-                
-                myApp.draw()
-                myApp.setChallenge()
-
-                window.addEventListener("click", (event)=>{
-                        const mouse = {
-                                x : event.offsetX,
-                                y : event.offsetY,
-                        }
-
-                        myApp.answer = "######"
-                        myApp.display.collision(mouse)
-                        myApp.draw()
-                })
-        })
-}
+    
+                        // Clear the deferred prompt
+                        deferredPrompt = null;
+                        installBtn.style.display = 'none';
+                    });
+                });
+            });
+        });
+    }
+    
