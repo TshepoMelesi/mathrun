@@ -1,42 +1,40 @@
 if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
+            // Register service worker
             navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('✅ Service Worker registered:', registration);
-                })
-                .catch((error) => {
-                    console.error('❌ Service Worker registration failed:', error);
-                });
+                .then(reg => console.log('✅ Service Worker registered:', reg))
+                .catch(err => console.error('❌ SW registration failed:', err));
     
             const installBtn = document.getElementById('install-btn');
     
-            // 👉 Check if app is already installed or running in standalone
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            // ✅ Universal check for standalone mode (PWA installed)
+            const isRunningStandalone = () => {
+                return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            };
     
-            if (isStandalone) {
-                console.log("📱 App is running in standalone mode");
-                if (installBtn) installBtn.style.display = 'none';
-                return; // Exit early, no need to show install prompt
+            // 🟡 Hide button early if already installed
+            if (installBtn && isRunningStandalone()) {
+                console.log('📱 App is already installed and running in standalone mode');
+                installBtn.style.display = 'none';
+                return; // No need to show install prompt
             }
     
-            installBtn.style.backgroundColor = "red"
             let deferredPrompt = null;
     
-            // Listen for beforeinstallprompt
+            // Install prompt event
             window.addEventListener('beforeinstallprompt', (event) => {
-                console.log('ℹ️ beforeinstallprompt event fired');
+                console.log('ℹ️ beforeinstallprompt fired');
                 event.preventDefault();
                 deferredPrompt = event;
     
                 if (installBtn) {
                     installBtn.style.display = 'block';
-                    installBtn.innerText = 'Install ASM On Your Mobile';
+                    installBtn.innerText = 'Install ASM on your mobile';
     
                     installBtn.addEventListener('click', () => {
                         if (!deferredPrompt) return;
     
                         deferredPrompt.prompt();
-    
                         deferredPrompt.userChoice.then((choiceResult) => {
                             if (choiceResult.outcome === 'accepted') {
                                 console.log('✅ User accepted the install prompt');
@@ -44,16 +42,16 @@ if ('serviceWorker' in navigator) {
                                 console.log('❌ User dismissed the install prompt');
                             }
     
-                            deferredPrompt = null;
                             installBtn.style.display = 'none';
+                            deferredPrompt = null;
                         });
                     });
                 }
             });
     
-            // Listen for appinstalled event
+            // Installed event
             window.addEventListener('appinstalled', () => {
-                console.log('🎉 App was installed');
+                console.log('🎉 App installed');
                 if (installBtn) installBtn.style.display = 'none';
             });
         });
