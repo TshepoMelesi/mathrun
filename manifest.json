@@ -7,8 +7,8 @@
     "display": "standalone",
     "display_override": ["window-controls-overlay", "standalone"],
     "orientation": "portrait",
-    "background_color": "yellow",
-    "theme_color": "red",
+    "background_color": "black",
+    "theme_color": "white",
     "description": "Online learning platform for high school learners",
     "prefer_related_applications": false,
     "icons": [
