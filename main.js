@@ -19,6 +19,7 @@ if ('serviceWorker' in navigator) {
                 return; // Exit early, no need to show install prompt
             }
     
+            installBtn.style.backgroundColor = "red"
             let deferredPrompt = null;
     
             // Listen for beforeinstallprompt
