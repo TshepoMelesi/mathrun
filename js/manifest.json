@@ -1,0 +1,20 @@
+{
+    "name" : "After School Mathematics",
+    "short_name" : "ASM",
+    "start_url" : "../",
+    "display" : "standalone",
+    "background_color" : "yellow",
+    "theme_color" : "red",
+    "icons" : [
+        {
+            "src" : "../assets/icons/icon-192x192.png",
+            "size" : "192x192",
+            "type" : "image/png"
+        },
+        {
+            "src" : "../assets/icons/icon-512x512.png",
+            "size" : "512x512",
+            "type" : "image/png"
+        }
+    ]
+}

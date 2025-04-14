@@ -26,39 +26,50 @@ class Card extends Vector{
         }
 }
 
-window.addEventListener("load", () => {
-        const WIDTH = window.innerWidth
-        const HEIGHT = window.innerHeight
+if("serviceWorker" in navigator)
+        {
+        window.addEventListener("load", () => {
+                const WIDTH = window.innerWidth
+                const HEIGHT = window.innerHeight
 
-        board.width = WIDTH
-        board.height = HEIGHT
+                board.width = WIDTH
+                board.height = HEIGHT
 
-        const myApp = new Application(
-                board, 
-                {
-                        width : WIDTH, 
-                        height : HEIGHT,
-                        level : 3
+                navigator.serviceWorker.register("/service-worker.js")
+                        .then((registration) => {
+                                console.log("service worker registered: ", registration)
+                        })
+                        .catch((error) => {
+                                conole.log("Service Worker reg failed: " + error)
+                        })
+
+                const myApp = new Application(
+                        board, 
+                        {
+                                width : WIDTH, 
+                                height : HEIGHT,
+                                level : 3
+                        }
+                )
+                
+                const handleNext = () => {
+                        myApp.setChallenge()
                 }
-        )
-        
-        const handleNext = () => {
-                myApp.setChallenge()
-        }
-        nextBtn.ontouchstart = () => handleNext()
-        nextBtn.onmousedown = () => handleNext()
-        
-        myApp.draw()
-        myApp.setChallenge()
-
-        window.addEventListener("click", (event)=>{
-                const mouse = {
-                        x : event.offsetX,
-                        y : event.offsetY,
-                }
-
-                myApp.answer = "######"
-                myApp.display.collision(mouse)
+                nextBtn.ontouchstart = () => handleNext()
+                nextBtn.onmousedown = () => handleNext()
+                
                 myApp.draw()
+                myApp.setChallenge()
+
+                window.addEventListener("click", (event)=>{
+                        const mouse = {
+                                x : event.offsetX,
+                                y : event.offsetY,
+                        }
+
+                        myApp.answer = "######"
+                        myApp.display.collision(mouse)
+                        myApp.draw()
+                })
         })
-})
+}
