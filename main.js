@@ -22,8 +22,18 @@ if ('serviceWorker' in navigator) {
                 deferredPrompt = event;
     
                 const installBtn = document.getElementById('install-btn');
+
                 installBtn.style.display = 'block';
-                installBtn.innerText = 'Install App';
+                installBtn.innerText = 'Install ASM On Your Mobile';
+
+                if(installBtn){
+                        window.addEventListener("appinstalled", () => {
+                                console.log("App was installed")
+                                installBtn.style.display = "none"
+                        })
+                }
+
+                
     
                 installBtn.addEventListener('click', () => {
                     if (!deferredPrompt) return;
