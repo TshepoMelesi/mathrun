@@ -1,6 +1,12 @@
 const CACHE_NAME = "my-cache-v1"
 
-const urlsToCache = ["/", "/index.html", "/main.js"]
+const urlsToCache = [
+    "/", 
+    "/index.html", 
+    "/main.js",
+    "/styles/main.css",
+    "/styles/quickquizz.css"
+]
 
 self.addEventListener("install",(event) => {
     event.wiatUntil(

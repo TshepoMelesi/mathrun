@@ -34,7 +34,7 @@
                                                         <a href="./../../index.html">Home</a>
                                                 </li>
                                                 <li>
-                                                        <a href="#apps">Apps</a>
+                                                        <a href="../index.html">Apps</a>
                                                 </li>
                                                 <li class="menu-btns">
                                                     <button onclick="routeTo('ADD_CARD')">add new card</button>
@@ -104,10 +104,10 @@
                                     <option>Physics</option>
                                     <option>Chemistry</option>
                                 </select>
-
-                                <p>
-                                    50 of 390
-                                </p>
+                                <div class="search-container">
+                                    <label for="search">search</label>
+                                    <input id="search" class="search" type="text" placeholder="Search Card"/>
+                                </div>
                             </div>
                             
                             <ul class="card-list">
@@ -118,16 +118,12 @@
                             <!-- TODO: ADD PLAY CARD PAGE -->
                             <div class="app-info">
                                 <label for="info-subject">current subject</label>
-                                <select id="info-subject" class="info-subject">
-                                    <option selected>All cards</option>
+                                <select id="info-subject" class="info-subject filter-cards">
+                                    <option selected>Filter Cards</option>
                                     <option>Mathematics</option>
                                     <option>Physics</option>
                                     <option>Chemistry</option>
                                 </select>
-
-                                <p>
-                                    50 cards
-                                </p>
                             </div>
                             <div class="card">
                                 <div class="card-inner">
@@ -178,10 +174,6 @@
                         <button class="footer-action right" onclick="handleRightAction()">next card</button>
                     </section>
                 </main>
-
-                <footer>
-                        <a href="#home">go up</a>
-                </footer>
             
             <script src="./data.js"></script>            
             <script src="./quickQuizz.js"></script>            

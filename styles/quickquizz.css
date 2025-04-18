@@ -116,14 +116,25 @@ main .app-main .app-add-card textarea{
     resize : none;
     height: 100%;
 }
-
 main .app-main .app-info{
-    display: flex;
+    display: grid;
     width: 100%;
-    justify-content: space-between;
-    align-items: end;
+    grid-template-columns: max(20%, 7em) auto;
+    padding: 0.6em 0.5em;
     color: var(--primary-100);
 }
+main .app-main .app-info .search-container{
+    width: 100%;
+}
+main .app-main .app-info .search-container .search{
+    width: 100%;
+    padding: 0.3em 0.5em;
+    border: 2px solid white;
+    outline: none;
+    color: white;
+    background-color: inherit;
+}
+
 
 main .app-main .app-info select{
     background-color: inherit;

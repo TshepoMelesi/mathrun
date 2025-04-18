@@ -1,0 +1,64 @@
+.course-list{
+    display: flex;
+    gap: 0.4em;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.course-card{
+    margin-block: 1em;
+    border: 2px solid white;
+    padding: 0.5em;
+    border-radius: 0.4em;
+    max-width: 300px;
+}
+.course-card .thumbnail-container{
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: black;
+    margin-bottom: 0.4em;
+    overflow: hidden;
+}
+.course-card .thumbnail-container .thumbnail{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.course-card .info-container{
+    text-align: center;
+    color: rgb(217, 217, 217);
+}
+.course-card .info-container .course-tags{
+    display: flex;
+    gap: 0.3em;
+    list-style: none;
+}
+.course-card .info-container .course-tags .tag{
+    font-size: 0.7em;
+    padding: 0.1em 0.8em;
+    background-color: rgb(37, 37, 37);
+    border-radius: 10px;
+}
+.course-card .info-container .course-title{
+    font-size: 1.1em;
+}
+.course-card .info-container .short-description{
+    font-size: 0.9em;
+    color: rgb(192, 192, 192);
+    margin-block: 0.4em;
+}
+.course-card .info-container .course-update-time{
+    font-size: 0.8em;
+}
+.course-card .info-container .course-update-time span{
+    font-weight: bold;    
+}
+
+.course-card .info-container .course-action{
+    background-color: white;
+    color: black;
+    display: block;
+    padding: 0.4em;
+    margin-block: 0.4em 0;
+    width: 100%;
+}

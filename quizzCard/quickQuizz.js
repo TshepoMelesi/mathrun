@@ -1,6 +1,6 @@
-const quizzes = []
 const width = window.innerWidth
 const height = window.innerHeight
+const search = document.querySelector(".search")
 const cardInner = document.querySelector(".card-inner")
 const cardQuestion = document.querySelector(".card-question")
 const cardAnswer = document.querySelector(".card-answer")
@@ -17,6 +17,11 @@ const track = document.querySelector(".track")
 const appTitle = document.querySelector(".app-title")
 const subjectEl = document.querySelector(".subject")
 const typeEl = document.querySelector(".quizz-type")
+const filterCards = document.querySelector(".filter-cards")
+const infoSubject = document.querySelector(".info-subject")
+const tempCards = [] // for prev and next cards
+let tempCardEdit= []
+
 
 const modes = ["ADD_CARD", "CARD_LIST", "PLAY_CARDS", "HOME"]
 const pages = {
@@ -27,7 +32,7 @@ const pages = {
             title : "add new card",
             element : addCardPage,
             "leftAction" : {func : () => handleDashboard(), name : "view cards"},
-            "rightAction" : {func : () => handleAddQuizz(), name : "save card"},
+            "rightAction" : {func : () => handleAddCard(), name : "save card"},
         },
         "CARD_LIST": {
             title : "deck of cards",
@@ -43,9 +48,10 @@ const pages = {
         },
     }
 }
+
 const app = {
     name : "asm-app", 
-    quizzes : [],
+    cards : [],
     quizzMode : "LOOP_ALL",
 }
 
@@ -60,19 +66,18 @@ const sanitizeText = (input) => {
 const generateId = (max = 10000000, min = 0) => {
     return Math.round(Math.random() * (max - min) + min)
 }
-const addQuizz = (compQuizz) => {
-    const id = generateId()
+const addCard = (card) => {
+    const id = card.id || generateId()
     // const quizz = {question, answer, id, subject, type, level, curriculum}
-
-    saveQuizz(
+    saveCard(
         {
             id,
-            s : compQuizz.s,
-            f : compQuizz.f,
-            l : compQuizz.l,
-            c : compQuizz.c,
-            b : compQuizz.b,
-            t : compQuizz.t
+            s : card.s,
+            f : card.f,
+            l : card.l,
+            c : card.c,
+            b : card.b,
+            t : card.t
         }
     )
 }
@@ -110,44 +115,20 @@ const decompress = (data, metadata) => {
 }
 
 const temp = []
+
+
+
+//===================================================================
+// HANDLE DATABASE ==================================================
+//===================================================================
+
+// create empty database initially.
 const createDb = (name = null) => {
     if(!name) return console.log("Db name needed!")
     console.log("create db => ", name)
     localStorage.setItem(app.name, JSON.stringify(app))
-
-    data.terms.forEach(d => addQuizz(d))
 }
-const saveQuizz = (quizz) => {
-    if(!getDb()) {
-        createDb(app.name)
-    }
-    
-    let appDb = JSON.parse(localStorage.getItem(app.name))
-    
-    if(appDb?.quizzes.find(q => 
-        q.f == quizz.f && 
-        q.b == quizz.b)
-    ){
-        return
-    }
-    
-    appDb.quizzes.push(quizz)
-    
-    localStorage.setItem(app.name, JSON.stringify(appDb))
-}
-const getQuizzIndex = (id) =>{
-    return quizzes.findIndex(q => q.id === id)
-}
-const removeQuizz = (id) => {
-    const quizzIdx = getQuizzIndex(id)
-    const delQuizz = quizzes.splice(quizzIdx, 1)
-    app.quizzes = quizzes
-    // localStorage.setItem(app.name, JSON.stringify(app))
-    refreshList()
-    console.log(app.quizzes)
-
-    return delQuizz
-}
+// GET THE DATABASE
 const getDb = () => {
     const db = localStorage.getItem(app.name)
 
@@ -157,40 +138,165 @@ const getDb = () => {
     }
     return JSON.parse(db)
 }
-let db = getDb()
-const generateQuizz = () => {
+const saveDb = (appData) => {
+    localStorage.setItem(app.name, JSON.stringify(appData))
+}
+const saveCard = (card) => {
     const db = getDb()
-    const quizz = db.quizzes[Math.floor(Math.random() * db.quizzes.length)]
+    if(!db) createDb(app.name)
 
-    quizzes.push(quizz)
-    return quizz
+    if(db?.cards.find(q =>  q.f === card.f && q.b === card.b)){  
+        return console.log("There is a duplicate")
+    }
+
+    if(tempCardEdit.length){
+        // remove the existing card
+        removeCard(card.id, db)
+
+        clearInputs()
+        tempCardEdit = []
+    }
+    
+    // add a new or edited card
+    db.cards.push(card)
+    
+    saveDb(db)
+    refreshList()
 }
-const display = (quizz) => {
-    cardQuestion.innerText = quizz.f
-    cardAnswer.innerText = quizz.b
+const getCardIndex = (id) =>{
+    return getDb().cards.findIndex(q => q.id === id)
 }
+const removeCard = (id, db) => {
+    const cardIdx = getCardIndex(id)
+    const delCard = db.cards.splice(cardIdx, 1)
+    saveDb(db)
+    refreshList()
+
+    return delCard
+}
+const generateCard = () => {
+    const db = getDb()
+
+    if(!db.cards.length) return false
+
+    return db.cards[Math.floor(Math.random() * db.cards.length)]
+}
+const display = (card) => {
+    cardQuestion.innerText = card.f
+    cardAnswer.innerText = card.b
+}
+
+// HANDLES OF THE APP ========================================
 const handlePrev = () => {
-
-    if(quizzes.length <1) return
+    if(tempCards.length <1) return
     cardInner.style = "transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);"
 
-    quizzes.pop()
-    const quizz = quizzes[quizzes.length - 1]
+    tempCards.pop()
+    const prevCard = tempCards[tempCards.length - 1]
 
-    if(!quizz) return
-    display(quizz)
+    if(!prevCard) return false
+    display(prevCard)
 }
 const handleFlip = () => {
     cardInner.style = "transform: rotateX(180deg) rotateY(0deg) rotateZ(180deg);"
     if(timer) clearInterval(timer)
 }
 const handleNext = () => {
+    const db = getDb()
     cardInner.style = "transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);"
-    if(!getDb().quizzes.length) return
-    const quizz = generateQuizz()
-    display(quizzes[quizzes.length - 1])
+    if(!listToShow.length) return
+    const card = listToShow[Math.floor(Math.random() * listToShow.length)]
+    display(card)
+    tempCards.push(card)
     stopwatch()
 }
+const handleAddCard = () => {
+    if(tempCardEdit.length){ // we currently have a card we are editing
+        tempCardEdit[0].f = sanitizeText(sanitizeHTML(quizzFront.value))
+        tempCardEdit[0].b = sanitizeText(sanitizeHTML(quizzBack.value))
+
+        addCard(tempCardEdit[0])
+        return
+    }
+    const s = sanitizeText(sanitizeHTML(subjectEl.options[subjectEl.selectedIndex].text))
+    const t = sanitizeText(sanitizeHTML(typeEl.options[typeEl.selectedIndex].text))
+    const f = sanitizeText(sanitizeHTML(quizzFront.value))
+    const b = sanitizeText(sanitizeHTML(quizzBack.value))
+    if(!f || !b) return
+
+    addCard({f, b, s, t, c : "all", l : "all"})
+    refreshList()
+    clearInputs()
+}
+const handleEdit = (id) => {
+    const db = getDb()
+    const card = db.cards[getCardIndex(id)]
+    tempCardEdit[0] = card
+    routeTo("ADD_CARD")
+    populateInputs(card)
+    // removeCard(id)
+}
+const handleDelete = (id) => {
+    const delCard = removeCard(id, getDb())
+}
+const handleClearAll = () => {
+    app.cards = []
+    listToShow = []
+
+    localStorage.setItem(app.name, JSON.stringify(app))
+    refreshList()
+}
+const handleDashboard = () => {
+    routeTo("CARD_LIST")
+    setMode("CARD_LIST")
+}
+const handleHome = () => {
+        setMode("HOME")
+        dashboard.style.display = "none"
+        dashboard.style.zIndex = -1000000
+}
+const handleLeftAction = () => {
+    pages.pageList[getMode()].leftAction.func()
+}
+const handleRightAction = () => {
+    pages.pageList[getMode()].rightAction.func()
+}
+
+// ============================================================
+
+//===================================================================
+// HANDLE FILTERING =================================================
+//===================================================================
+let listToShow = getDb()?.cards
+let searchText = ""
+let selectedFilter = ""
+const filteringCards = () => {
+    const filtered = getDb().cards.filter(card => card.s.toLowerCase().includes(selectedFilter.toLowerCase()))
+    listToShow = filtered.filter(card => card.f.toLowerCase().includes(searchText.toLowerCase()))
+    refreshList()
+}
+search.oninput = event => {
+    searchText = event.target.value
+
+    filteringCards(selectedFilter, searchText)
+}
+
+infoSubject.onchange = (event) => {
+    console.log(event.target.value, listToShow)
+    selectedFilter = event.target.value == "All cards" ? "" : event.target.value
+    filteringCards(selectedFilter, searchText)
+    refreshList()
+}
+
+filterCards.onchange = (event) => {
+    selectedFilter = event.target.value == "Filter Cards" ? "" : event.target.value 
+    console.log(selectedFilter, listToShow)
+    searchText = ""
+    filteringCards()
+}
+
+// HANDLING APP MODE ==========================================
+// manages the app's current page
 const toggleMode = () =>{
     if(getMode() == "DASHBOARD"){
         setMode("HOME")
@@ -214,85 +320,55 @@ const setCurrPage = (page) => {
 const getCurrPage = () => {
     return pages.currentPage
 }
+
+// HANDLE INPUTS ===============================================
 const clearInputs = () => {
     quizzFront.value = ""
     quizzBack.value = ""
 }
-const populateInputs = (quizz) => {
-    quizzFront.value = quizz.f
-    quizzBack.value = quizz.b
+const populateInputs = (card) => {
+    quizzFront.value = card.f
+    quizzBack.value = card.b
 }
-const handleAddQuizz = () => {
-    const s = sanitizeText(sanitizeHTML(subjectEl.options[subjectEl.selectedIndex].text))
-    const t = sanitizeText(sanitizeHTML(typeEl.options[typeEl.selectedIndex].text))
-    const f = sanitizeText(sanitizeHTML(quizzFront.value))
-    const b = sanitizeText(sanitizeHTML(quizzBack.value))
-    
-    if(!f || !b) return
 
-    addQuizz({f, b, s, t, c : "all", l : "all"})
-    db = getDb()
-    refreshList()
-    clearInputs()
-}
-const handleEdit = (id) => {
-    const db = getDb()
-    routeTo("ADD_CARD")
-    const quizz = db.quizzes[getQuizzIndex(id)]
 
-    populateInputs(quizz)
-    removeQuizz(id)
-}
-const handleDelete = (id) => {
-    const delQuizz = removeQuizz(id)
-}
-const createItem = (data) => {
-    return `<li class="card-list-item" data-id="${data.id}">
+// HANDLES CARD DISPLAYS ======================================
+const createItem = (card) => {
+    if(!card.id) return
+    return `<li class="card-list-item" data-id="${card.id}">
                 <div class="card-content-front">
-                    <p class="content-front">${data.f}</p>
+                    <p class="content-front">${card.f}</p>
                 </div>
                 <div class="card-content-back">
-                    <p class="content-back">${data.b}</p>
+                    <p class="content-back">${card.b}</p>
                 </div>
                 <div class="card-action">
-                    <button class="control-btn delete" onclick="handleDelete(${data.id})">delete</button>
-                    <button class="control-btn edit"  onclick="handleEdit(${data.id})">edit card</button>
+                    <button class="control-btn delete" onclick="handleDelete(${card.id})">delete</button>
+                    <button class="control-btn edit"  onclick="handleEdit(${card.id})">edit card</button>
                 </div>
             </li>`
 }
 
-// TODO : add pagination
-const loadQuizzes = (db) => {
-    for(let i = 0; i < 50; i++){
-        quizzes.push(db.quizzes[i])
-    }
-}
 const refreshList = () =>{
     const db = getDb()
 
+    if(!db) return false
     quizzList.innerHTML = ""
-    loadQuizzes(db)
-    for(let i = 0; i < 50; i++){
-        quizzList.innerHTML += createItem(quizzes[i])
+
+    if(searchText.length || listToShow.length || selectedFilter.length){
+        listToShow.forEach(card => {
+            quizzList.innerHTML += createItem(card)
+        })
+    } else{
+        db.cards.forEach(card => {
+            quizzList.innerHTML += createItem(card)
+        })
     }
 }
-
-const handleClearAll = () => {
-    app.quizzes = []
-
-    localStorage.setItem(app.name, JSON.stringify(app))
-    refreshList()
-}
-const handleDashboard = () => {
-    routeTo("CARD_LIST")
-    setMode("CARD_LIST")
-}
-const handleHome = () => {
-        setMode("HOME")
-        dashboard.style.display = "none"
-        dashboard.style.zIndex = -1000000
-}
 const routeTo = (mode) => {
+    searchText = ""
+    selectedFilter = ""
+    filteringCards()
     setMode(mode)
 
     renderMain()
@@ -308,21 +384,10 @@ const renderMain = () => {
     footerActionBtns[1].innerText = pages.pageList[getMode()].rightAction.name
     appTitle.innerText = pages.pageList[getMode()].title
 }
-const handleLeftAction = () => {
-    pages.pageList[getMode()].leftAction.func()
-}
-const handleRightAction = () => {
-    pages.pageList[getMode()].rightAction.func()
-}
-const initialize = () => {
-    data.terms.forEach((term) => {
-        addQuizz(term)
-    })
-}
-if(getDb().quizzes.length < 100){
-    console.log("initializing")
-    initialize()
-}
+
+
+
+// HANDLE PLAY ======================================================
 let timer = null
 const stopwatch = () => {
     clearInterval(timer)
@@ -346,3 +411,15 @@ routeTo("CARD_LIST")
 routeTo("PLAY_CARDS")
 
 refreshList()
+
+
+/**
+ * HANDLING THE DATABASE
+ * this database will only hold cards the user creates or added
+ * from the Library
+ */
+
+// CREATE CARD
+// DELETE CARD
+// UPDATE CARD
+// READ CARD
