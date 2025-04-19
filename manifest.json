@@ -8,7 +8,7 @@
     "display_override": ["window-controls-overlay", "standalone"],
     "orientation": "portrait",
     "background_color": "black",
-    "theme_color": "white",
+    "theme_color": "black",
     "description": "Online learning platform for high school learners",
     "prefer_related_applications": false,
     "icons": [
