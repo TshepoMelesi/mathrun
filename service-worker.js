@@ -5,7 +5,9 @@ const urlsToCache = [
     "/index.html", 
     "/main.js",
     "/styles/main.css",
-    "/styles/quickquizz.css"
+    "/styles/quickquizz.css",
+    "/quizzCard/index.html",
+    "/quizzCard/quickQuizz.js",
 ]
 
 self.addEventListener("install",(event) => {
