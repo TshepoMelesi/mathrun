@@ -198,6 +198,8 @@ main{
         color: var(--primary-100);
         
         display: block;
+        padding: 0.4em;
+        border-radius: 0.4em;
         margin : 1em auto 0 auto;
         width: 80%;
 }
@@ -235,7 +237,7 @@ footer a{
         .menu .menu-items{
                 position: absolute;
                 z-index: 100000;
-                background-color: rgb(255, 2, 2);
+                background-color: black;
                 border-radius: 0.6em 0 0 0.6em;
                 padding: 1em;
                 left: 100%;
