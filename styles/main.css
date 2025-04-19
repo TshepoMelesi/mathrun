@@ -203,8 +203,9 @@ main{
 }
 
 .menu-btns{
-        z-index: 10000000000000000000000000;
-        display: block;
+        z-index: 100;
+        display: grid;
+        grid-template-columns: 1fr;
         flex-direction: column;
 }
 
