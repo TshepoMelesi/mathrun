@@ -204,7 +204,7 @@ main{
 
 .menu-btns{
         z-index: 10000000000000000000000000;
-        display: flex;
+        display: block;
         flex-direction: column;
 }
 
