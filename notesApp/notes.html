@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-N2N32T3779"></script>
+            <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-N2N32T3779');
+            </script>
+                <meta charset="UTF-8">
+                <meta name="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
+                <link rel="stylesheet" href="../styles/main.css">
+                <link rel="stylesheet" href="./notes.css">
+                <title>QuickQuizz | ASM</title>
+                <meta name="description" content="A virtual flash cards app that you can use to improve your memory">
+                <meta name="keywords" content="flash cards, free flash cards, mathematics, physical science, school">
+        </head>
+
+        <body>
+                <header id="home">
+                        <div class="container">
+                                <h1 class="logo">ASM</h1>
+
+                                <nav class="menu">
+                                        <button class="burger">
+                                                <div class="burgerline"></div>
+                                        </button>
+                                        <ul class="menu-items">
+                                                <li>
+                                                        <a href="../index.html">Home</a>
+                                                </li>
+                                                <li>
+                                                        <a href="../index.html">Apps</a>
+                                                </li>
+                                                <!-- <li class="menu-btns">
+                                                    <button onclick="routeTo('ADD_CARD')">add new card</button>
+                                                    <button onclick="routeTo('CARD_LIST')">list of cards</button>
+                                                    <button onclick="routeTo('PLAY_CARDS')">play cards</button>
+                                                </li> -->
+                                        </ul>
+                                </nav>
+                        </div>
+                </header>
+
+                <main>
+                    <section class="app-main">
+                        <section class="page home">
+                            <section class="page-title">
+                                <h2 class="title">Your Notes</h2>
+                            </section>
+
+                            <section class="list-container">
+                                <section class="category-list-container">
+
+                                </section>
+                            </section>
+                        </section>
+                        <section class="page add">
+                            <section class="page-title">
+                                <h2 class="title">Add Page</h2>
+                            </section>
+
+                            <section class="meta-container">
+                                <div class="category-container">
+                                    <label for="category">
+                                        <select id="category" class="category">
+                                            <option>Mathematics</option>
+                                            <option>Physics</option>
+                                            <option>Chemistry</option>
+                                        </select>
+                                    </label>
+                                    <button class="add-tag">+ tag</button>
+                                </div>
+                                <div class="note-title-container">
+                                    <label for="note-title">
+                                        <input 
+                                            class="note-title" 
+                                            type="text" 
+                                            placeholder="note title" 
+                                            />
+                                    </label>
+                                </div>
+                            </section>
+
+                            <section class="note-body-container">
+                                <textarea class="note-body"></textarea>
+                            </section>
+                        </section>
+                        <section class="page read">
+                            <section class="page-title">
+                                <h2 class="title">Your Note (private)</h2>
+                            </section>
+
+                            <section class="meta-container">
+                                
+                            </section>
+
+                            <section class="note-body-container">
+                                <div resize="disabled" class="note-body">
+                                    <p><strong  class="read-note-title"></strong></p>
+                                    <br />
+                                    <br />
+                                    <p class="read-note-body"></p>
+                                </div>
+                            </section>
+                        </section>
+
+                        <div class="universal">
+                            <div class="universal-menu">
+                                <button class="add-note">
+                                    Add Note
+                                </button>
+                                <button class="add-category">
+                                    Add Category
+                                </button>
+                            </div>
+                            <button class="universal-btn">ADD</button>
+                        </div>
+                    </section>
+                    
+                    <section class="app-footer">
+                        <button class="footer-action left" onclick="handleLeftAction()">
+                            clear notes
+                        </button>
+                        <button class="footer-action right" onclick="handleRightAction()">
+                            share all
+                        </button>
+                    </section>
+                </main>
+            
+            <script src="../js/elements.js"></script>           
+            <script src="../Database.js"></script>           
+            <script src="./Notes.js"></script>           
+        </body>
+</html>

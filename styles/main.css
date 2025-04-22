@@ -78,8 +78,7 @@ header nav ul{
         list-style : none;
         color: var(--primary-100);
         display: flex;
-        gap: 2em;
-
+        gap: 0.6em;
 }
 
 a{
@@ -88,6 +87,8 @@ a{
 
 header nav ul a{
         color: var(--primary-100);
+        display:block;
+        width: 100%;
 }
 
 .logo{
@@ -103,6 +104,7 @@ header nav ul a{
         position: relative;
         width: var(--burger-width);
         height: var(--burger-height);
+        cursor: pointer;
 }
 
 .burgerline,
@@ -139,6 +141,7 @@ header nav ul a{
 .menu:has(.burger:focus) .menu-items{
         left: calc(30% - 1em);
 }
+
 /* MAIN ============================================= */
 main{
         height: 100%;
@@ -205,6 +208,7 @@ main{
 }
 
 .menu-btns{
+        width: 10em;
         z-index: 100;
         display: grid;
         grid-template-columns: 1fr;
@@ -233,6 +237,9 @@ footer a{
 /* ====================================================================================== */
 /* MOBILE VERSION =============================================================================== */
 @media (max-width : 760px){
+        .menu:focus-within .menu-items{
+                left: calc(30% - 1em);
+        }
         
         .menu .menu-items{
                 position: absolute;
@@ -337,7 +344,7 @@ main .signin-header{
         .menu-btns{
                 position: absolute;
 
-                top: 100%;
+                top: 150%;
         }
         .menu .menu-items{
                 position: relative;

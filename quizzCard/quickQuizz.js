@@ -49,12 +49,6 @@ const pages = {
     }
 }
 
-const app = {
-    name : "asm-app", 
-    cards : [],
-    quizzMode : "LOOP_ALL",
-}
-
 const sanitizeHTML = (input) => {
     const temp = document.createElement("div")
     temp.textContent = input
@@ -122,25 +116,6 @@ const temp = []
 // HANDLE DATABASE ==================================================
 //===================================================================
 
-// create empty database initially.
-const createDb = (name = null) => {
-    if(!name) return console.log("Db name needed!")
-    console.log("create db => ", name)
-    localStorage.setItem(app.name, JSON.stringify(app))
-}
-// GET THE DATABASE
-const getDb = () => {
-    const db = localStorage.getItem(app.name)
-
-    if(!db) {
-        createDb(app.name)
-        return console.log("Just set a localStorage DB")
-    }
-    return JSON.parse(db)
-}
-const saveDb = (appData) => {
-    localStorage.setItem(app.name, JSON.stringify(appData))
-}
 const saveCard = (card) => {
     const db = getDb()
     if(!db) createDb(app.name)

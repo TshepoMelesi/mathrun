@@ -61,3 +61,4 @@ if ('serviceWorker' in navigator) {
         });
     }
     
+const db = getDb()
