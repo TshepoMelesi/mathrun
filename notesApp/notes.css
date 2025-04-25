@@ -116,6 +116,10 @@ main .app-main{
     z-index: 1;
 }
 
+.page-title{
+    font-size: 1.6em;
+}
+
 /* ============================================= */
 /* ADD PAGE STYLE ============================== */
 /* ============================================= */
@@ -208,6 +212,31 @@ main .app-main{
     z-index: 100;
     overflow-y: hidden;
 }
+
+.home .add-category-container{
+    width: 100%;
+    padding: 0.2em 1em;
+    display: grid;
+    grid-template-columns: auto 3em;
+}
+
+.home .add-category-container .add-category,
+.home .add-category-container .add-category-btn{
+    padding: 0.4em;
+    border: none;
+    outline: none;
+}
+
+.home .add-category-container .add-category{
+    border: 2px solid white;
+    background-color: inherit;
+    color: white;
+}
+
+.home .add-category-container .add-category-btn{
+    background-color: white;
+}
+
 .home .list-container{
     width: 100%;
     background-color: inherit;
@@ -224,6 +253,7 @@ main .app-main{
     flex-direction: column;
     margin-bottom: 1em;
 }
+
 .category-list-container .category{
     background-color: var(--gray-200);
     color: var(--gray-800);

@@ -11,6 +11,10 @@ const noteTitleEl = document.querySelector(".note-title")
 const noteBodyEl = document.querySelector(".note-body")
 const readNoteTitleEl = document.querySelector(".read-note-title")
 const readNoteBodyEl = document.querySelector(".read-note-body")
+const categoryEl = document.querySelector(".category")
+const addCategoryEl = document.querySelector(".add-category")
+const addCategoryBtn = document.querySelector(".add-category-btn")
+
 let tempNote = null
 
 const pages = {
@@ -85,6 +89,7 @@ if(getDb()){
     alert("Database doesn't exist. Please Refresh.")
 }
 
+
 //===================================================================
 // HANDLE ROUTING ===================================================
 //===================================================================
@@ -115,34 +120,74 @@ const routeTo = (page) => {
 //===================================================================
 // HANDLE ADD NOTE ==================================================
 //===================================================================
+const getNoteById = (id, db) => {
+    let searchedNote = null
+
+    db.notes.forEach(category => {
+        category.notes.forEach(note=> {
+            if(note.id === id) searchedNote = note
+        })
+    })
+
+    return searchedNote
+}
 const addNoteToDb = () => {
+    const db = getDb()
+
+    
     const noteTitle = sanitizeText(noteTitleEl.value.trim())
     const noteBody = sanitizeText(noteBodyEl.value.trim())
+    const noteCategory = sanitizeText(categoryEl.value)
+
+    if(tempNote){
+        // WE ARE EDITING EXISTING NOTE
+        const note = getNoteById(tempNote.id, db)
+
+        if(!note) return alert("Cannot edit this note.")
+        
+        note.title = noteTitle
+        note.body = noteBody
+        note.categoryName = noteCategory
+
+        saveDb(db)
+        
+        return handleRead(db.notes.findIndex(cat => cat.category === note.categoryName), note.id)
+    }
     
     if(!noteTitle || !noteBody) return false
     
-    const db = getDb()
+    const categoryIdx = db.notes.findIndex(cat => cat.category === noteCategory)
+
+    if(categoryIdx < 0) return alert("This category cannot be found!")
+
     const note = {
+        categoryName : noteCategory,
         id: generateId(999999999, 11111), 
         title:noteTitle,
         body:noteBody
     }
-    db.notes[0].notes.push(note)
+    db.notes[categoryIdx].notes.push(note)
     saveDb(db)
 
     return true
 }
 
 //===================================================================
-// LIST CATEGORIES =================================================
+// LIST CATEGORIES ==================================================
 //===================================================================
 const listCategories = () => {
     notesListContainer.innerHTML = ""
+    categoryEl.innerHTML = ""
 
     const db = getDb()
     const categories = db.notes
 
     categories.forEach((category, categoryIdx) => {
+        const categoryOption = createElem(
+            "option",
+            ["innerText", category.category],
+            categoryEl
+        )
         const details = createElem(
             "details", 
             ["class","category"], 
@@ -180,6 +225,25 @@ const listCategories = () => {
     })
 }
 
+const addCategory = () => {
+    const input = sanitizeText(addCategoryEl.value)
+
+    if(input.length < 1) return alert("Write something")
+
+    const db = getDb()
+
+    if(!db) return alert("Please reload this application. I cant find your DB.")
+
+    const category = {}
+    category.notes = []
+    category.category = input
+
+    db.notes.push(category)
+
+    saveDb(db)
+
+    listCategories()
+}
 //===================================================================
 // POPULATE READ PAGE ===============================================
 //===================================================================
@@ -192,7 +256,6 @@ const populateReadPage = (note) => {
 // POPULATE ADD PAGE ===============================================
 //===================================================================
 const populateAddPage = (note) => {
-    console.log(noteTitleEl)
     noteTitleEl.value = note.title
     noteBodyEl.value = note.body
 }
@@ -203,6 +266,9 @@ const clearAddPage = () => {
 //===================================================================
 // HANDLE ACTIONS ===================================================
 //===================================================================
+const handleDelete = () => {
+    
+}
 const handleEdit = () => {
     if(!tempNote) return alert("Cannot handle the requested edit.")
 
@@ -244,8 +310,10 @@ addNote.addEventListener("click", event => {
     handleAdd()
     universal.style.display = "none"
 })
+
+addCategoryBtn.onclick = () => addCategory()
 //===================================================================
-// HANDLE BUTTONS =================================================
+// HANDLE BUTTONS ===================================================
 //===================================================================
 const handleLeftAction = () => {
     pages.pageList[pages.currentPage].leftAction.func()
