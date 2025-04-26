@@ -8,10 +8,13 @@ const urlsToCache = [
     "/styles/quickquizz.css",
     "/quizzCard/index.html",
     "/quizzCard/quickQuizz.js",
+    "/notesApp/notes.html",
+    "/notesApp/notes.css",
+    "/notesApp/Notes.js",
 ]
 
 self.addEventListener("install",(event) => {
-    event.wiatUntil(
+    event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(urlsToCache)
         })
