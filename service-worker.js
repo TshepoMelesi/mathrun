@@ -11,6 +11,7 @@ const urlsToCache = [
     "/notesApp/notes.html",
     "/notesApp/notes.css",
     "/notesApp/Notes.js",
+    "/Database.js",
 ]
 
 self.addEventListener("install",(event) => {
