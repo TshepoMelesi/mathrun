@@ -2,7 +2,9 @@ const setAttribs = (elem, options) => {
     if(!options) return
     
     for(let i = 0; i < options.length; i += 2){
-        if(options[i] === "innerText"){
+        if(options[i] === "onclick"){
+            elem.onclick = options[i + 1]
+        } else if(options[i] === "innerText"){
             elem.innerText = options[i + 1]
         } else if(options[i] === "textContent"){
             elem.textContent = options[i + 1]

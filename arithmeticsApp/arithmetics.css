@@ -1,0 +1,189 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing : border-box;
+
+    font-size : 1em;
+    font-family: Arial;
+}
+
+h1{
+    font-size : 160%;
+}
+
+:root{
+    --header-height: 2em;
+    --white: #fff;
+    --black: #000;
+
+    --gray-50: #f9f9f9;
+    --gray-100: #ececec;
+    --gray-200: #e3e3e3;
+    --gray-300: #cdcdcd;
+    --gray-400: #b4b4b4;
+    --gray-500: #9b9b9b;
+    --gray-600: #676767;
+    --gray-700: #424242;
+    --gray-750: #2f2f2f;
+    --gray-800: #212121;
+    --gray-900: #171717;
+    --gray-950: #0d0d0d;
+
+    --max-width: 1000px;
+
+    --gap-040: 0.4em;
+
+    --title-size: 1.6em;
+    --input-height : 1.8em;
+}
+
+main{
+    max-height: 100%;
+    height: calc(100dvh - var(--header-height));
+    position: relative;
+    overflow-y: hidden;
+    display: flex;
+    gap: 0.4em;
+    flex-direction: column; 
+    justify-content: space-between;
+    align-items: center;
+    color: var(--gray-200);
+}
+
+/* APP PAGES ============================================== */
+main .app-main{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    overflow: hidden;
+}
+
+
+.app-main .page{
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    
+    justify-items: center;
+    transition: top 300ms linear;
+    z-index: 1;
+}
+
+.page-title{
+    font-size: var(--title-size);
+}
+
+/* ============================================= */
+/* ADD PAGE STYLE ============================== */
+/* ============================================= */
+
+/* ============================================= */
+/* ADD PAGE ENDS =============================== */
+/* ============================================= */
+
+/* ============================================= */
+/* HOME PAGE STYLE ============================= */
+/* ============================================= */
+
+.home{
+    background-color: inherit;
+    top: 100%;
+    z-index: 100;
+    overflow-y: hidden;
+}
+
+.options{
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(5, 1fr);
+}
+.option{
+    padding: 0.4em 0;
+
+}
+/* ============================================= */
+/* PLAY PAGE ENDS ============================== */
+/* ============================================= */
+.info{
+    width: 100%;
+    padding: 0.2em 3em;
+    display: flex;
+    justify-content: space-between;
+}
+.options{
+    display: grid;
+    grid-template-columns: 75% auto;
+    width: 100%;
+    padding: 0.2em 3.15em;
+}
+.option{
+    font-size: 1.2em;
+    border: 2px solid white;
+    background-color: white;
+}
+.option.reveal{
+    color: white;
+    background-color: inherit;
+}
+
+.board{
+    /* border: 2px solid white; */
+    width: 100%;
+    height: 400px;
+}
+
+.slot{
+    font-size: 2em;
+    text-align: center;
+    margin: 0.4em;
+}
+
+/* ============================================= */
+/* READ PAGE STYLE ============================= */
+/* ============================================= */
+.read{
+    top: 0;
+    background-color: inherit;
+    display: grid;
+    grid-template-rows: var(--title-size) 3em auto;
+}
+
+/* ============================================= */
+/* ADD PAGE ENDS =============================== */
+/* ============================================= */
+
+
+
+
+/* ============================================= */
+/* FOOTER BTNS STYLE =========================== */
+/* ============================================= */
+.app-footer{
+    width: 100%;
+    max-width: 500px;
+    display: grid;
+    gap: 0.4em;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 1em;
+}
+.app-footer button{
+    width: 100%;
+    background-color: red;
+    padding: 0.4em;
+    border: 2px solid  var(--gray-100);
+    background-color:  var(--gray-100);
+    border-radius: 0.4em;
+}
+
+.app-footer .left{
+    background-color: inherit;
+    border-color:  var(--gray-100);
+    color: var(--gray-100);
+}
+/* ============================================= */
+/* FOOTER BTNS ENDS ============================ */
+/* ============================================= */
+
+

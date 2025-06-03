@@ -14,6 +14,10 @@ const readNoteBodyEl = document.querySelector(".read-note-body")
 const categoryEl = document.querySelector(".category")
 const addCategoryEl = document.querySelector(".add-category")
 const addCategoryBtn = document.querySelector(".add-category-btn")
+const confirm = document.querySelector(".confirm")
+const confirmTitle = document.querySelector(".confirm-title")
+const confirmText = document.querySelector(".confirm-text")
+const confirmActions = document.querySelector(".confirm-actions")
 
 let tempNote = null
 
@@ -58,19 +62,19 @@ const pages = {
         },
     }
 }
-
 const sanitizeHTML = (input) => {
     const temp = document.createElement("div")
     temp.textContent = input
     return temp.innerHTML
 }
-const sanitizeText = (input) => {
-    return input.trim().replace(/[^a-zA-Z0-9 .,!?-]/g, "")
+const sanitizeText = (input, flag = false) => {
+    if(!flag) return input.trim().replace(/[^a-zA-Z0-9 .,!?-]/g, "")
+
+    return input
 }
 const generateId = (max = 10000000, min = 0) => {
     return Math.round(Math.random() * (max - min) + min)
 }
-
 
 //===================================================================
 // HANDLE DATABASE =================================================
@@ -88,8 +92,6 @@ if(getDb()){
 } else{
     alert("Database doesn't exist. Please Refresh.")
 }
-
-
 //===================================================================
 // HANDLE ROUTING ===================================================
 //===================================================================
@@ -115,8 +117,6 @@ const routeTo = (page) => {
     footerActionBtns[0].innerText = pages.pageList[page].leftAction.name
     footerActionBtns[1].innerText = pages.pageList[page].rightAction.name
 }
-
-
 //===================================================================
 // HANDLE ADD NOTE ==================================================
 //===================================================================
@@ -134,9 +134,8 @@ const getNoteById = (id, db) => {
 const addNoteToDb = () => {
     const db = getDb()
 
-    
     const noteTitle = sanitizeText(noteTitleEl.value.trim())
-    const noteBody = sanitizeText(noteBodyEl.value.trim())
+    const noteBody = sanitizeText(noteBodyEl.value.trim(), true)
     const noteCategory = sanitizeText(categoryEl.value)
 
     if(tempNote){
@@ -150,28 +149,29 @@ const addNoteToDb = () => {
         note.categoryName = noteCategory
 
         saveDb(db)
-        
         return handleRead(db.notes.findIndex(cat => cat.category === note.categoryName), note.id)
     }
     
-    if(!noteTitle || !noteBody) return false
+    if(!noteBody){
+        alert("Add something in the body.")
+        return false
+    }
     
     const categoryIdx = db.notes.findIndex(cat => cat.category === noteCategory)
 
     if(categoryIdx < 0) return alert("This category cannot be found!")
-
+    const date = new Date()
     const note = {
         categoryName : noteCategory,
         id: generateId(999999999, 11111), 
-        title:noteTitle,
+        title:noteTitle || "Untitled-" + date.getDay() + "-" + (date.getMonth() + 1) + "-" + (date.getFullYear()),
         body:noteBody
     }
     db.notes[categoryIdx].notes.push(note)
     saveDb(db)
 
-    return true
+    return note
 }
-
 //===================================================================
 // LIST CATEGORIES ==================================================
 //===================================================================
@@ -203,11 +203,22 @@ const listCategories = () => {
             ["class","notes-list"],
             details
         )
+        const addNoteBtn = createElem(
+            "button",
+            ["class", "hovering-addNoteBtn", "innerText", "add note"], 
+            details
+        )
+
+        addNoteBtn.onclick = () => {
+            routeTo("ADD_PAGE")
+            handleAdd()
+            categoryEl.value = category.category
+        }
 
         category.notes.forEach(note => {
             const item = createElem(
                 "li",
-                ["class", "note-item"],
+                ["class", "note-item", "href", "#"],
                 notes
             )
             const title = createElem(
@@ -215,12 +226,30 @@ const listCategories = () => {
                 ["class", "notes-title", "innerText", note.title],
                 item
             )
-            const action = createElem(
-                "button",
-                ["class", "timestamp", "innerText", "read"],
+            const actionsContainer = createElem(
+                "div",
+                ["class", "actions"],
                 item
             )
-            action.onclick = () => handleRead(categoryIdx, note.id)
+            const editBtn = createElem(
+                "button",
+                ["class", "timestamp", "innerText", "edit"],
+                actionsContainer
+            )
+            const deleteBtn = createElem(
+                "button",
+                ["class", "timestamp", "innerText", "delete"],
+                actionsContainer
+            )
+            deleteBtn.onclick = (event) => {
+                event.stopPropagation()
+                handleDelete(categoryIdx, note.id)
+            }
+            editBtn.onclick = (event) => {
+                event.stopPropagation()
+                handleEdit(note)
+            }
+            item.onclick = () => handleRead(categoryIdx, note.id)
         })
     })
 }
@@ -248,10 +277,10 @@ const addCategory = () => {
 // POPULATE READ PAGE ===============================================
 //===================================================================
 const populateReadPage = (note) => {
-    readNoteTitleEl.innerText = note.title
+    if(!note) return alert("Cannot read this note.")
+    readNoteTitleEl.innerText = note.title 
     readNoteBodyEl.innerText = note.body
 }
-
 //===================================================================
 // POPULATE ADD PAGE ===============================================
 //===================================================================
@@ -264,27 +293,80 @@ const clearAddPage = () => {
     noteBodyEl.value = ""
 }
 //===================================================================
+// HANDLE CONFIRM ACTIONS ===========================================
+//===================================================================
+const cancelConfirmation = () => {
+    // confirm.style.left = "100%"
+}
+const setConfirmation = (text, callback) => {
+    confirmActions.innerHTML = ""
+    confirm.style.left = 0;
+    confirmTitle.innerText = text[0]
+    confirmText.innerText = text[1]
+
+    const deleteBtn = createElem(
+        "button", 
+        [
+            "class", "confirm-btn delete", 
+            "onclick", () => {
+                callback()
+                confirm.style.left = "100%"
+            }, 
+            "innerText", "delete"
+        ], 
+        confirmActions
+    )
+    const cancelBtn = createElem(
+        "button", 
+        [
+            "class", "confirm-btn cancel", 
+            "onclick", () => {
+                cancelConfirmation()
+                confirm.style.left = "100%"
+            }, 
+            "innerText", "cancel"
+        ], 
+        confirmActions
+    )
+}
+//===================================================================
 // HANDLE ACTIONS ===================================================
 //===================================================================
-const handleDelete = () => {
-    
-}
-const handleEdit = () => {
+const handleEdit = (note = null) => {
+    universal.style.display = "none"
+    if(note){
+        tempNote = note
+    }
     if(!tempNote) return alert("Cannot handle the requested edit.")
 
     populateAddPage(tempNote)
     routeTo("ADD_PAGE")
 }
-
 const handleAdd = () => {
+    universal.style.display = "none"
+    tempNote = null
     clearAddPage()
     routeTo("ADD_PAGE")
 }
-
+const handleDelete = (categoryIdx, id) => {
+    const db = getDb()
+    let dbNotes = db.notes[categoryIdx].notes
+    const filteredNotes = dbNotes.filter(note => note.id !== id)
+    // set confirmation here
+    setConfirmation(
+        ["Delete Note", "Are you sure you want to delete this note?"],
+        function (){
+            db.notes[categoryIdx].notes = filteredNotes
+            saveDb(db)
+            routeTo("NOTES_PAGE")
+        }
+    )
+    cancelConfirmation()
+}
 const handleRead = (categoryIdx, id) => {
     const db = getDb()
     if(!db.notes[categoryIdx].notes){
-        return console.log("Requested note doesnt exist")
+        return alert("Requested note doesnt exist")
     }else{
         tempNote = db.notes[categoryIdx].notes.find(note => note.id === id)
         populateReadPage(tempNote)
@@ -293,10 +375,19 @@ const handleRead = (categoryIdx, id) => {
 }
 const handleSaveNote = () => {
     if(!addNoteToDb()) return
+
     routeTo("NOTES_PAGE")
 }
 const handleClearAll = () => {
-    routeTo("NOTES_PAGE")
+    const db = getDb()
+    setConfirmation(
+        ["Delete All Notes", "Are you sure you want to wipe your notePad?"],
+        () => {
+            db.notes = [{category : "misc", notes : []}]
+            saveDb(db)
+            routeTo("NOTES_PAGE")
+        }
+    )
 }
 const handleSelect = () => {
 
@@ -306,22 +397,17 @@ const handleNotes = () => {
     routeTo("NOTES_PAGE")
 }
 
-addNote.addEventListener("click", event => {
-    handleAdd()
-    universal.style.display = "none"
-})
+addNote.addEventListener("click", event => handleAdd())
 
 addCategoryBtn.onclick = () => addCategory()
+
 //===================================================================
 // HANDLE BUTTONS ===================================================
 //===================================================================
 const handleLeftAction = () => {
     pages.pageList[pages.currentPage].leftAction.func()
 }
-
 const handleRightAction = () => {
     pages.pageList[pages.currentPage].rightAction.func()
 }
-
-
 routeTo("NOTES_PAGE")

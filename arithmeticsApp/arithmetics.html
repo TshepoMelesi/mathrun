@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-N2N32T3779"></script>
+            <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-N2N32T3779');
+            </script>
+                <meta charset="UTF-8">
+                <meta name="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
+                <link rel="stylesheet" href="../styles/main.css">
+                <link rel="stylesheet" href="./arithmetics.css">
+                <title>Arithmetics | ASM</title>
+                <meta 
+                    name="description" 
+                    content="Improve your speed and accuracy in solving simple arithmetic problems">
+                <meta name="keywords" content="mental maths, train maths">
+        </head>
+
+        <body>
+                <header id="home">
+                        <div class="container">
+                                <h1 class="logo">ASM</h1>
+
+                                <nav class="menu">
+                                        <button class="burger">
+                                                <div class="burgerline"></div>
+                                        </button>
+                                        <ul class="menu-items">
+                                                <li>
+                                                        <a href="../index.html">Home</a>
+                                                </li>
+                                                <li>
+                                                        <a href="../index.html">Apps</a>
+                                                </li>
+                                        </ul>
+                                </nav>
+                        </div>
+                </header>
+
+                <main>
+                    <!-- 
+                        THIS IS THE SECTION THAT HOST ALL THE 
+                        PAGES OF THIS APP
+                    -->
+                    <section class="app-main">
+
+                        <!-- PLAY PAGE -->
+                        <section class="page play">
+                            <section class="page-title">
+                                <h2 class="title">ARITHMETICS</h2>
+                            </section>
+                            
+                            <section class="info">
+                                <p class="complete-quizz">0 / 20</p>
+
+                                <p class="score">
+                                    high score 
+                                    <span class="high-score">0</span>%
+                                </p>
+                            </section>
+
+                            <section class="board-container">
+                                <canvas class="board"></canvas>
+                            </section>
+
+                            <section class="timer-container">
+                                <div class="timer-track">
+                                    <div class="timer"></div>
+                                </div>
+                            </section>
+
+                            <section class="options">
+                                <button class="option">next question</button>
+                                <button class="option reveal">reveal</button>
+                            </section>
+                        </section>
+                    </section>
+                    
+                    <section class="app-footer">
+                        <button class="footer-action left" onclick="handleLeftAction()">
+                            Menu
+                        </button>
+                        <button class="footer-action right" onclick="handleRightAction()">
+                            Exit
+                        </button>
+                    </section>
+                </main>
+            
+            <script src="../js/elements.js"></script> 
+            <script src="../js/math/lib.js"></script>          
+            <script src="../Database.js"></script>           
+            <script src="./arithmetics.js"></script>           
+        </body>
+</html>
